@@ -1,0 +1,10 @@
+version: "3.6"
+
+services:
+  maci:
+    tty: true
+    image: maci
+    ports:
+      - "8545:8545"
+    volumes:
+      - ./zkeys:/root/maci/cli/zkeys
