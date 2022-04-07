@@ -65,6 +65,7 @@ contract QuadraticHackathon is MACI {
         nativeToken.safeTransfer(recipients[_voteOptionIndex], amount);
     }
 
+    // TODO: Exclude options with <5% of the votes
     function getAllocatedAmount(uint256 _pollId, uint256 _votes)
         public
         view
