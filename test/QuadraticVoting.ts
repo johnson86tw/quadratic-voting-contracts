@@ -165,7 +165,7 @@ let tallyFileData: {
 };
 let maciNewSbCommitment: any;
 
-describe("Test MACI", function () {
+describe("Test Quadratic Voting", function () {
   before(async function () {
     this?.timeout(400000);
     [
