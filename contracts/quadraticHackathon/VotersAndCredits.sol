@@ -47,12 +47,13 @@ contract VotersAndCredits is
         emit VoterRemoved(_voter);
     }
 
-    function addJudge(address _judge) external onlyOwner {
+    function setJudge(address _judge) external onlyOwner {
         require(
             _judge != address(0),
-            "VotersAndCredits: Voter address is zero"
+            "VotersAndCredits: Judge address is zero"
         );
-        require(!judges[_judge], "VotersAndCredits: Voter is already a judge");
+        require(!judges[_judge], "VotersAndCredits: Judge already verified");
+        require(!voters[_judge], "VotersAndCredits: Judge is not a voter");
         judges[_judge] = true;
     }
 
