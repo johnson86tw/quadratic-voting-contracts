@@ -163,8 +163,8 @@ let tallyFileData: {
 };
 let maciNewSbCommitment: any;
 
-describe("Run MACI", function () {
-  beforeEach(async function () {
+describe("Test MACI", function () {
+  before(async function () {
     this?.timeout(400000);
     [
       deployer,
@@ -567,5 +567,190 @@ describe("Run MACI", function () {
     );
   });
 
-  // it("verify ZK Proof on chain", async () => {});
+  it("verify - stateAQ merged and processing complete", async () => {
+    const stateAqMerged = await poll.stateAqMerged();
+    expect(stateAqMerged).to.be.true;
+
+    const processingComplete =
+      await pollProcessorAndTallyer.processingComplete();
+    expect(processingComplete).to.be.true;
+  });
+
+  it("verify - all parameters are set correctly", async () => {
+    const {
+      intStateTreeDepth,
+      messageTreeSubDepth,
+      messageTreeDepth,
+      voteOptionTreeDepth,
+    } = await poll.treeDepths();
+    expect(intStateTreeDepth).to.be.equal(treeDepths.intStateTreeDepth);
+    expect(messageTreeDepth).to.be.equal(treeDepths.messageTreeDepth);
+    expect(messageTreeSubDepth).to.be.equal(treeDepths.messageTreeSubDepth);
+    expect(voteOptionTreeDepth).to.be.equal(treeDepths.voteOptionTreeDepth);
+
+    const [numSignUps, numMessages] = await poll.numSignUpsAndMessages();
+    expect(numSignUps).to.be.equal(10);
+    expect(numMessages).to.be.equal(10);
+
+    const [maxMessages, maxVoteOptions] = await poll.maxValues();
+    expect(maxVoteOptions).to.be.equal(maxValues.maxVoteOptions);
+    expect(maxMessages).to.be.equal(maxValues.maxMessages);
+
+    const [_messageBatchSize, _tallyBatchSize] = await poll.batchSizes();
+    expect(_messageBatchSize).to.be.equal(messageBatchSize);
+    expect(_tallyBatchSize).to.be.equal(tallyBatchSize);
+  });
+
+  it("verify - merged state root is correct", async () => {
+    const mergedStateRootPoll = await poll.mergedStateRoot();
+    const mergedStateRootMACI = await maci.getStateAqRoot();
+    const expectedStateTreeRoot =
+      maciState.polls[0].maciStateRef.stateTree.root;
+    expect(mergedStateRootPoll).to.not.be.equal(BigNumber.from(0));
+    expect(mergedStateRootMACI).to.not.be.equal(BigNumber.from(0));
+    expect(expectedStateTreeRoot).to.not.be.equal(BigNumber.from(0));
+    expect(mergedStateRootPoll).to.be.equal(mergedStateRootMACI); // MACI state root is the same as the poll state root
+    expect(mergedStateRootPoll).to.be.equal(expectedStateTreeRoot); // MACI state root is the same as the one calculated offchain
+  });
+
+  it("verify - sbCommitment is correct on pollProcessorAndTallyer", async () => {
+    const pptsbCommitment = await pollProcessorAndTallyer.sbCommitment();
+    const expectedSbCommitment = maciNewSbCommitment;
+    expect(pptsbCommitment).to.not.be.equal(BigNumber.from(0));
+    expect(expectedSbCommitment).to.not.be.equal(BigNumber.from(0));
+    expect(pptsbCommitment).to.be.equal(expectedSbCommitment); // pollProcessorAndTallyer sbCommitment is the same as the one calculated offchain
+  });
+
+  it("verify - sbCommitment correct on poll", async () => {
+    const pollCurrentSbCommitment = await poll.currentSbCommitment();
+    const pptsbCommitment = await pollProcessorAndTallyer.sbCommitment();
+    const expectedSbCommitment = maciNewSbCommitment;
+    expect(pollCurrentSbCommitment).to.not.be.equal(BigNumber.from(0));
+    expect(pptsbCommitment).to.not.be.equal(BigNumber.from(0));
+    expect(expectedSbCommitment).to.not.be.equal(BigNumber.from(0));
+    expect(pptsbCommitment).to.be.equal(expectedSbCommitment);
+    expect(pollCurrentSbCommitment).to.not.be.equal(pptsbCommitment); // poll sbCommitment is not the same as the one calculated on state
+  });
+
+  it("verify - merged message root is correct", async () => {
+    const mergedMessageRoot = await messageAq.getMainRoot(
+      treeDepths.messageTreeDepth
+    );
+    const expectedMessageTreeRoot = maciState.polls[0].messageTree.root;
+    expect(mergedMessageRoot).to.not.be.equal(BigNumber.from(0));
+    expect(expectedMessageTreeRoot).to.not.be.equal(BigNumber.from(0));
+    expect(mergedMessageRoot).to.be.equal(expectedMessageTreeRoot); // MACI message root is the same as the one calculated offchain
+  });
+
+  it("verify - tally commitment is correct", async () => {
+    const tallyCommitment = await pollProcessorAndTallyer.tallyCommitment();
+    const expectedTallyCommitment = tallyFileData.newTallyCommitment;
+    expect(tallyCommitment).to.not.be.equal(BigNumber.from(0));
+    expect(expectedTallyCommitment).to.not.be.equal(BigNumber.from(0));
+    expect(tallyCommitment).to.be.equal(expectedTallyCommitment); // pollProcessorAndTallyer tallyCommitment is the same as the one calculated offchain
+  });
+
+  // ===========================================================
+  // There are 3 verifier:
+  // 1. poll.verifySpentVoiceCredits()
+  // 2. poll.verifyTallyResult()
+  // 3. poll.verifyPerVOSpentVoiceCredits()
+  //
+  // TODO: fix these broken tests once upstream maci decorator is fixed
+  // ===========================================================
+
+  it.skip("should verify total spent voice credits", async () => {
+    const { spent: _totalSpent, salt: _totalSpentSalt } =
+      tallyFileData.totalSpentVoiceCredits;
+
+    expect(await poll.verifySpentVoiceCredits(_totalSpent, _totalSpentSalt)).to
+      .be.true;
+  });
+
+  it.skip("should verify tally result", async () => {
+    // Setup
+    const recipientIndex = 1;
+    const resultTree = new IncrementalQuinTree(
+      treeDepths.voteOptionTreeDepth,
+      BigInt(0),
+      STATE_TREE_ARITY,
+      hash5
+    );
+    const perVOspentTree = new IncrementalQuinTree( treeDepths.voteOptionTreeDepth, BigInt(0), STATE_TREE_ARITY, hash5); // prettier-ignore
+
+    for (const leaf of tallyFileData.results.tally) resultTree.insert(leaf); // insert resuls tally as leaves
+    for (const leaf of tallyFileData.perVOSpentVoiceCredits.tally)
+      perVOspentTree.insert(leaf); // insert perVO spent as leaves
+
+    const resultProof = resultTree.genMerklePath(recipientIndex); // generate merkle path for result
+    const spentProof = perVOspentTree.genMerklePath(recipientIndex); // generate merkle path for spent
+
+    expect(resultTree.root).to.be.equal(resultProof.root); // verify result tree root
+    expect(perVOspentTree.root).to.be.equal(spentProof.root); // verify spent tree root
+
+    // Calculate arguments
+    const _voteOptionIndex = recipientIndex;
+    const _tallyResult = tallyFileData.results.tally[recipientIndex]; // result of the recipient
+    const _tallyResultProof = resultProof.pathElements.map((x: any) =>
+      x.map((y: any) => y.toString())
+    ); // result proof as astring
+    const _spentVoiceCreditsHash = BigNumber.from(
+      hashLeftRight(
+        BigInt(tallyFileData.totalSpentVoiceCredits.spent),
+        BigInt(tallyFileData.totalSpentVoiceCredits.salt)
+      ).toString()
+    ).toString();
+    const _perVOSpentVoiceCreditsHash = BigNumber.from(
+        hashLeftRight(
+          perVOspentTree.root, 
+          BigInt(tallyFileData.perVOSpentVoiceCredits.salt)).toString()
+      ).toString(); // prettier-ignore
+    const _tallyCommitment = BigNumber.from(
+      tallyFileData.newTallyCommitment
+    ).toString();
+
+    // * @param _voteOptionIndex the index of the vote option to verify the correctness of the tally
+    // * @param _tallyResult Flattened array of the tally
+    // * @param _tallyResultProof Corresponding proof of the tally result
+    // * @param _tallyResultSalt the respective salt in the results object in the tally.json
+    // * @param _spentVoiceCreditsHash hashLeftRight(number of spent voice credits, spent salt)
+    // * @param _perVOSpentVoiceCreditsHash hashLeftRight(merkle root of the no spent voice credits per vote option, perVOSpentVoiceCredits salt)
+    // * @param _tallyCommitment newTallyCommitment field in the tally.json
+    expect(
+      await poll.verifyTallyResult(
+        _voteOptionIndex,
+        _tallyResult,
+        _tallyResultProof,
+        _spentVoiceCreditsHash,
+        _perVOSpentVoiceCreditsHash,
+        _tallyCommitment
+      )
+    ).to.be.true;
+  });
+
+  it.skip("should verify per vote option spent voice credits", async () => {
+    const recipientIndex = 1;
+
+    const perVOspentTree = new IncrementalQuinTree( treeDepths.voteOptionTreeDepth, BigInt(0), STATE_TREE_ARITY, hash5); // prettier-ignore
+    for (const leaf of tallyFileData.perVOSpentVoiceCredits.tally)
+      perVOspentTree.insert(leaf); // insert tally as leaves
+    const spentProof = perVOspentTree.genMerklePath(recipientIndex); // generate merkle path for the spent voice credits
+    expect(perVOspentTree.root).to.be.equal(spentProof.root); // verify that the root of the tree is the same as the root of the merkle path
+
+    const _voteOptionIndex = recipientIndex;
+    const _spent = tallyFileData.perVOSpentVoiceCredits.tally[recipientIndex]; // get the spent voice credits for the recipient
+    const _spentProof = spentProof.pathElements.map((x: any) =>
+      x.map((y: any) => y.toString())
+    ); // convert merkle path to string
+    const _spentSalt = tallyFileData.perVOSpentVoiceCredits.salt; // get salt from tally.json
+
+    expect(
+      await poll.verifyPerVOSpentVoiceCredits(
+        _voteOptionIndex,
+        _spent,
+        _spentProof,
+        _spentSalt
+      )
+    ).to.be.true;
+  });
 });
