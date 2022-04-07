@@ -12,6 +12,8 @@ import {
 // @ts-ignore
 import { MaciState, genProcessVkSig, genTallyVkSig } from "maci-core";
 
+// TODO: check conflix with https://github.com/quadratic-funding/qfi/blob/main/packages/contracts/tests/QV/06-verify.ts
+
 import { PoseidonT3__factory } from "../typechain/factories/PoseidonT3__factory";
 import { PoseidonT3 } from "../typechain/PoseidonT3";
 import { PoseidonT4__factory } from "../typechain/factories/PoseidonT4__factory";
