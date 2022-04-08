@@ -1,9 +1,13 @@
 # Quadratic Voting Contracts
 
-## Running the code
+## Run tests
 - Run `yarn` to install the dependencies
 - Run `yarn build` to compile the contracts and generate typechain files.
 - Run `yarn run test test/QuadraticVoting.ts` to run the tests.
+
+## Run scripts
+- Run `yarn hardhat node` to start localhost network.
+- Run `yarn hardhat run scripts/0-deployQV --network localhost` to deploy contracts.
 
 ## Quadratic Hackathon
 

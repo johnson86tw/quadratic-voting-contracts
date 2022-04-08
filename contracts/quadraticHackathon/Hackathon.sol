@@ -10,7 +10,7 @@ import {Poll} from "maci-contracts/contracts/Poll.sol";
 import {SignUpGatekeeper} from "maci-contracts/contracts/gatekeepers/SignUpGatekeeper.sol";
 import {InitialVoiceCreditProxy} from "maci-contracts/contracts/initialVoiceCreditProxy/InitialVoiceCreditProxy.sol";
 
-contract QuadraticHackathon is MACI {
+contract Hackathon is MACI {
     using SafeERC20 for ERC20;
     ERC20 public nativeToken;
 

@@ -1,7 +1,7 @@
 import { ethers } from "hardhat";
 import { expect } from "chai";
 import { BigNumber, BigNumberish, Signer } from "ethers";
-import { Command, Keypair, Message, VerifyingKey } from "maci-domainobjs";
+import { Command, Keypair, VerifyingKey } from "maci-domainobjs";
 import {
   G1Point,
   G2Point,
@@ -10,7 +10,7 @@ import {
   IncrementalQuinTree,
 } from "maci-crypto";
 // @ts-ignore
-import { MaciState, genProcessVkSig, genTallyVkSig } from "maci-core";
+import { MaciState } from "maci-core";
 
 // TODO: check conflix with https://github.com/quadratic-funding/qfi/blob/main/packages/contracts/tests/QV/06-verify.ts
 
@@ -91,7 +91,10 @@ let vkRegistry: VkRegistry;
 let qv: QuadraticVoting;
 let maci: MACI;
 
-let linkedLibraryAddresses: MACILibraryAddresses | PollFactoryLibraryAddresses;
+let linkedLibraryAddresses:
+  | MACILibraryAddresses
+  | PollFactoryLibraryAddresses
+  | MessageAqFactoryLibraryAddresses;
 
 // roles
 let coordinator: Keypair;
