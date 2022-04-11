@@ -4,7 +4,7 @@ services:
   maci:
     tty: true
     image: maci
-    ports:
-      - "8545:8545"
+    network_mode: "host"
     volumes:
       - ./zkeys:/root/maci/cli/zkeys
+      - ./docker/defaults.ts:/root/maci/cli/ts/defaults.ts

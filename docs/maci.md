@@ -1,14 +1,20 @@
 # MACI v1.0.4
 
-## Getting Started
+## Use docker
 
-Build docker image for maci
+Build docker image with repo https://github.com/chnejohnson/maci
 
 ```
 docker build -t maci .
 ```
 
-Run docker-compose
+or download image from [dockerhub](https://hub.docker.com/repository/docker/chnejohnson/maci-v1) (about 3 GB)
+
+```
+docker pull chnejohnson/maci-v1
+```
+
+Run docker-compose in qv-contracts
 
 ```
 docker-compose up -d
