@@ -1,4 +1,7 @@
-import { ethers } from "hardhat";
+import hre, { ethers } from "hardhat";
+import path from "path";
+import fs from "fs";
+import { Addresses } from "../ts/addresses";
 import { BigNumber, BigNumberish, Signer } from "ethers";
 import { Command, Keypair, VerifyingKey } from "maci-domainobjs";
 import {
@@ -46,10 +49,22 @@ const messageBatchSize = MESSAGE_TREE_ARITY ** treeDepths.messageTreeSubDepth;
 const tallyBatchSize = STATE_TREE_ARITY ** treeDepths.intStateTreeDepth;
 
 async function main() {
-  const [deployer] = await ethers.getSigners();
+  const [deployer, user1] = await ethers.getSigners();
+
+  const coordinatorPrivKey = process.env.coordinatorPrivKey;
+  const userPrivKey = process.env.userPrivKey;
+  if (!coordinatorPrivKey || !userPrivKey) {
+    throw new Error("Please provide correct MACI private keys");
+  }
+
+  const deploymentFileName = `deployment-${hre.network.name}.json`;
+  const deploymentPath = path.join(__dirname, "..", deploymentFileName);
+  const addresses = JSON.parse(
+    fs.readFileSync(deploymentPath).toString()
+  ) as Addresses;
 
   const vkRegistry = new VkRegistry__factory(deployer).attach(
-    "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9"
+    addresses.vkRegistry
   );
 
   const stateTreeDepth = STATE_TREE_DEPTH;

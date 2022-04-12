@@ -7,4 +7,6 @@ services:
     network_mode: "host"
     volumes:
       - ./zkeys:/root/maci/cli/zkeys
+      - ./proofs:/root/maci/cli/proofs
       - ./docker/defaults.ts:/root/maci/cli/ts/defaults.ts
+      - ./docker/defaults.js:/root/maci/cli/build/defaults.js
