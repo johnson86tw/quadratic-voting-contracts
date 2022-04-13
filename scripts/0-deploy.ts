@@ -15,6 +15,9 @@ import { QuadraticVoting__factory } from "../typechain/factories/QuadraticVoting
 import { MACI__factory } from "../typechain/factories/MACI__factory";
 import { AccQueueQuinaryMaci__factory } from "../typechain/factories/AccQueueQuinaryMaci__factory";
 
+import { PollProcessorAndTallyer__factory } from "../typechain/factories/PollProcessorAndTallyer__factory";
+import { Verifier__factory } from "../typechain/factories/Verifier__factory";
+
 async function main() {
   const [deployer] = await ethers.getSigners();
 
@@ -72,6 +75,12 @@ async function main() {
     throw new Error("Failed to initialize maci");
   }
 
+  // deploy verifier and pollProcessorAndTallyer
+  const verifier = await new Verifier__factory(deployer).deploy();
+  const pollProcessorAndTallyer = await new PollProcessorAndTallyer__factory(
+    deployer
+  ).deploy(verifier.address);
+
   const addresses: Addresses = {
     poseidonT5: poseidonT5.address,
     poseidonT3: poseidonT3.address,
@@ -82,6 +91,7 @@ async function main() {
     messageAqFactory: messageAqFactory.address,
     stateAq: stateAq.address,
     maci: maci.address,
+    ppt: pollProcessorAndTallyer.address,
   };
 
   const jsonPath = path.join(

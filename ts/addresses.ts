@@ -8,6 +8,7 @@ interface Addresses {
   messageAqFactory: string;
   stateAq: string;
   maci: string;
+  ppt: string;
 }
 
 export { Addresses };

@@ -8,30 +8,9 @@ import { MACI__factory } from "../typechain/factories/MACI__factory";
 
 // deployPoll parameters
 const duration = 10000;
-// const maxValues = {
-//   maxUsers: 25,
-//   maxMessages: 25,
-//   maxVoteOptions: 25,
-// };
-// const treeDepths = {
-//   intStateTreeDepth: 2, //NOTE: actualy use tally batch size of 25
-//   messageTreeDepth: 4,
-//   messageTreeSubDepth: 2,
-//   voteOptionTreeDepth: 2,
-// };
-const maxValues = {
-  maxUsers: 25,
-  maxMessages: 25,
-  maxVoteOptions: 25,
-};
-const treeDepths = {
-  intStateTreeDepth: 1, //NOTE: actualy use tally batch size of 25
-  messageTreeDepth: 2,
-  messageTreeSubDepth: 1,
-  voteOptionTreeDepth: 2,
-};
 
 async function main() {
+  // users
   const [deployer, user1] = await ethers.getSigners();
 
   const _coordinatorPubKey = process.env.coordinatorPubKey;
@@ -40,6 +19,7 @@ async function main() {
   }
   const coordinatorPubKey = PubKey.unserialize(_coordinatorPubKey);
 
+  // addresses
   const deploymentFileName = `deployment-${hre.network.name}.json`;
   const deploymentPath = path.join(__dirname, "..", deploymentFileName);
   const addresses = JSON.parse(
@@ -56,6 +36,30 @@ async function main() {
     ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT4"]:
       addresses.poseidonT4,
   };
+
+  // settings
+  const maxValues = {
+    maxUsers: process.env.maxUsers as string,
+    maxMessages: process.env.maxMessages as string,
+    maxVoteOptions: process.env.maxVoteOptions as string,
+  };
+  const treeDepths = {
+    intStateTreeDepth: process.env.intStateTreeDepth as string,
+    messageTreeDepth: process.env.messageTreeDepth as string,
+    messageTreeSubDepth: process.env.messageTreeSubDepth as string,
+    voteOptionTreeDepth: process.env.voteOptionTreeDepth as string,
+  };
+
+  for (const [, value] of Object.entries(maxValues)) {
+    if (!value) {
+      throw new Error("Please provide correct maxValues");
+    }
+  }
+  for (const [, value] of Object.entries(treeDepths)) {
+    if (!value) {
+      throw new Error("Please provide correct treeDepths");
+    }
+  }
 
   const maci = new MACI__factory(
     { ...linkedLibraryAddresses },
