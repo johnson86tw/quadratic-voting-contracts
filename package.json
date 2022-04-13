@@ -1,7 +1,8 @@
 {
   "name": "qv-contracts",
   "version": "0.0.1",
-  "description": "quadratic voting contracts",
+  "license": "GPL-3.0-or-later",
+  "description": "Quadratic Voting contracts",
   "main": "index.js",
   "scripts": {
     "clean": "shx rm -rf ./build ./cache ./coverage ./typechain ./coverage.json ./abi",
