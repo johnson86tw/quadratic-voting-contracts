@@ -1,7 +1,7 @@
 import hre, { ethers } from "hardhat";
 import path from "path";
 import fs from "fs";
-import { Addresses } from "../ts/addresses";
+import { Addresses } from "../ts/interfaces";
 
 import { PoseidonT3__factory } from "../typechain/factories/PoseidonT3__factory";
 import { PoseidonT4__factory } from "../typechain/factories/PoseidonT4__factory";

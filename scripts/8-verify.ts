@@ -1,16 +1,27 @@
 import hre, { ethers } from "hardhat";
 import fs from "fs";
 import path from "path";
-import { Addresses } from "../ts/interfaces";
-
-import { Poll__factory } from "../typechain/factories/Poll__factory";
+import { Addresses, TallyResult } from "../ts/interfaces";
+import { verifyTallyResult } from "../ts/maci";
 import { MACI__factory } from "../typechain/factories/MACI__factory";
-import { AccQueueQuinaryMaci__factory } from "../typechain";
+import { PollProcessorAndTallyer__factory } from "../typechain/factories/PollProcessorAndTallyer__factory";
+import { Poll__factory } from "../typechain";
 
 const pollId = 0;
+const tallyFilePath = path.join(__dirname, "..", "proofs/tally.json");
 
 async function main() {
-  const [deployer, user1] = await ethers.getSigners();
+  const [deployer] = await ethers.getSigners();
+
+  const userPrivKey = process.env.userPrivKey;
+  if (!userPrivKey) {
+    throw new Error("Please provide correct maci private key");
+  }
+
+  const _coordinatorPubKey = process.env.coordinatorPubKey;
+  if (!_coordinatorPubKey) {
+    throw new Error("Please provide coordinator maci public key");
+  }
 
   const deploymentFileName = `deployment-${hre.network.name}.json`;
   const deploymentPath = path.join(__dirname, "..", deploymentFileName);
@@ -40,20 +51,20 @@ async function main() {
     deployer
   ).attach(pollAddress);
 
-  // const extContracts = await poll.extContracts();
-  // const messageAqAddress = extContracts.messageAq;
+  const ppt = new PollProcessorAndTallyer__factory(deployer).attach(
+    addresses.ppt
+  );
 
-  // const messageAq = new AccQueueQuinaryMaci__factory(
-  //   { ...linkedLibraryAddresses },
-  //   deployer
-  // ).attach(messageAqAddress);
+  const tallyResult: TallyResult = JSON.parse(
+    fs.readFileSync(tallyFilePath).toString()
+  );
 
-  await poll.mergeMaciStateAqSubRoots(0, 0);
-  await poll.mergeMaciStateAq(0);
-
-  await poll.mergeMessageAqSubRoots(0);
-  await poll.mergeMessageAq();
-  console.log("Successfully merged");
+  const isVerified = await verifyTallyResult(tallyResult, poll, ppt);
+  if (isVerified) {
+    console.log("Verified!");
+  } else {
+    throw new Error("Failed to verify tally result");
+  }
 }
 
 main().catch((error) => {

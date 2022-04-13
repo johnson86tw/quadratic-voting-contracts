@@ -1,7 +1,7 @@
 import hre, { ethers } from "hardhat";
 import path from "path";
 import fs from "fs";
-import { Addresses } from "../ts/addresses";
+import { Addresses } from "../ts/interfaces";
 import { BigNumber, BigNumberish, Signer } from "ethers";
 import { Command, Keypair, VerifyingKey } from "maci-domainobjs";
 import {

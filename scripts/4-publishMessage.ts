@@ -1,8 +1,7 @@
 import hre, { ethers } from "hardhat";
 import fs from "fs";
 import path from "path";
-import { Addresses } from "../ts/addresses";
-
+import { Addresses } from "../ts/interfaces";
 import { Command, Keypair, PrivKey, PubKey } from "maci-domainobjs";
 import { Poll__factory } from "../typechain/factories/Poll__factory";
 import { MACI__factory } from "../typechain/factories/MACI__factory";
