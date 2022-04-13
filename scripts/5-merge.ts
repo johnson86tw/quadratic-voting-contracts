@@ -40,14 +40,6 @@ async function main() {
     deployer
   ).attach(pollAddress);
 
-  // const extContracts = await poll.extContracts();
-  // const messageAqAddress = extContracts.messageAq;
-
-  // const messageAq = new AccQueueQuinaryMaci__factory(
-  //   { ...linkedLibraryAddresses },
-  //   deployer
-  // ).attach(messageAqAddress);
-
   await poll.mergeMaciStateAqSubRoots(0, 0);
   await poll.mergeMaciStateAq(0);
 
