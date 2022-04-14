@@ -56,6 +56,7 @@ async function main() {
     deployer
   ).deploy(pollFactory.address, qv.address, qv.address);
 
+  // why do this?
   const stateAqAddress = await maci.stateAq();
   const stateAq = new AccQueueQuinaryMaci__factory(
     { ...linkedLibraryAddresses },

@@ -13,7 +13,19 @@ const GAS_LIMIT = 30000000;
 
 // https://hardhat.org/config/
 const config: HardhatUserConfig = {
-  solidity: "0.7.2",
+  solidity: {
+    version: "0.7.2",
+    settings: {
+      // why this works for deploying on testnet?
+      optimizer: {
+        enabled: true,
+        runs: 200,
+      },
+    },
+  },
+  // paths: {
+  //   artifacts: "build/contracts",
+  // },
   networks: {
     hardhat: {
       allowUnlimitedContractSize: true, // for deploying maci
@@ -26,6 +38,12 @@ const config: HardhatUserConfig = {
     kovan: {
       url: `https://kovan.infura.io/v3/${process.env.INFURA_API_KEY}`,
       chainId: 42,
+      accounts:
+        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    },
+    rinkeby: {
+      url: `https://rinkeby.infura.io/v3/${process.env.INFURA_API_KEY}`,
+      chainId: 4,
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },

@@ -9,6 +9,7 @@ interface Addresses {
   stateAq: string;
   maci: string;
   ppt: string;
+  qv?: string;
 }
 
 interface TallyResult {

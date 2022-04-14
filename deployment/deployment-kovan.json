@@ -1,0 +1,13 @@
+{
+  "poseidonT5": "0xa8d4452Ae282FC13521C6A4d91FE58bB49719EB4",
+  "poseidonT3": "0xa9228cA5f3dFCE19a61b7Bf1540F21C9e9d95a2b",
+  "poseidonT6": "0xc90d37Dc42a178D908AE97C9D53d22c6e4Eae812",
+  "poseidonT4": "0x9cDD2E83ebAD5d7B0cDd75bbaD169F0D21C3fE67",
+  "vkRegistry": "0x4E923Cd81087bE28008AA757e60d260f8a032EcE",
+  "pollFactory": "0x15d68Fd392E06051e476026927745a7007464390",
+  "messageAqFactory": "0xab3F49F542ED4613FFe484E2896979c0050Ec3b6",
+  "stateAq": "",
+  "maci": "",
+  "ppt": "",
+  "qv": "0xc61a3ecf9c4A1A94d0dFAE150c6A9b46A98B9E1e"
+}
