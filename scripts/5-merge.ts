@@ -5,12 +5,11 @@ import { Addresses } from "../ts/interfaces";
 
 import { Poll__factory } from "../typechain/factories/Poll__factory";
 import { MACI__factory } from "../typechain/factories/MACI__factory";
-import { AccQueueQuinaryMaci__factory } from "../typechain";
 
 const pollId = 0;
 
 async function main() {
-  const [deployer, user1] = await ethers.getSigners();
+  const [deployer] = await ethers.getSigners();
 
   const deploymentFileName = `deployment-${hre.network.name}.json`;
   const deploymentPath = path.join(__dirname, "..", deploymentFileName);

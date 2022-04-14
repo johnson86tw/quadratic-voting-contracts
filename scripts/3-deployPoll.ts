@@ -3,15 +3,12 @@ import fs from "fs";
 import path from "path";
 import { Addresses } from "../ts/interfaces";
 import { PubKey } from "maci-domainobjs";
-
 import { MACI__factory } from "../typechain/factories/MACI__factory";
 
-// deployPoll parameters
 const duration = 10000;
 
 async function main() {
-  // users
-  const [deployer, user1] = await ethers.getSigners();
+  const [deployer] = await ethers.getSigners();
 
   const _coordinatorPubKey = process.env.coordinatorPubKey;
   if (!_coordinatorPubKey) {
