@@ -1,22 +1,22 @@
 import hre, { ethers } from "hardhat";
 import path from "path";
 import fs from "fs";
-import { Addresses } from "../ts/interfaces";
+import { Addresses } from "../../ts/interfaces";
 
-import { PoseidonT3__factory } from "../typechain/factories/PoseidonT3__factory";
-import { PoseidonT4__factory } from "../typechain/factories/PoseidonT4__factory";
-import { PoseidonT5__factory } from "../typechain/factories/PoseidonT5__factory";
-import { PoseidonT6__factory } from "../typechain/factories/PoseidonT6__factory";
+import { PoseidonT3__factory } from "../../typechain/factories/PoseidonT3__factory";
+import { PoseidonT4__factory } from "../../typechain/factories/PoseidonT4__factory";
+import { PoseidonT5__factory } from "../../typechain/factories/PoseidonT5__factory";
+import { PoseidonT6__factory } from "../../typechain/factories/PoseidonT6__factory";
 
-import { VkRegistry__factory } from "../typechain/factories/VkRegistry__factory";
-import { PollFactory__factory } from "../typechain/factories/PollFactory__factory";
-import { MessageAqFactory__factory } from "../typechain/factories/MessageAqFactory__factory";
-import { QuadraticVoting__factory } from "../typechain/factories/QuadraticVoting__factory";
-import { MACI__factory } from "../typechain/factories/MACI__factory";
-import { AccQueueQuinaryMaci__factory } from "../typechain/factories/AccQueueQuinaryMaci__factory";
+import { VkRegistry__factory } from "../../typechain/factories/VkRegistry__factory";
+import { PollFactory__factory } from "../../typechain/factories/PollFactory__factory";
+import { MessageAqFactory__factory } from "../../typechain/factories/MessageAqFactory__factory";
+import { QuadraticVoting__factory } from "../../typechain/factories/QuadraticVoting__factory";
+import { MACI__factory } from "../../typechain/factories/MACI__factory";
+import { AccQueueQuinaryMaci__factory } from "../../typechain/factories/AccQueueQuinaryMaci__factory";
 
-import { PollProcessorAndTallyer__factory } from "../typechain/factories/PollProcessorAndTallyer__factory";
-import { Verifier__factory } from "../typechain/factories/Verifier__factory";
+import { PollProcessorAndTallyer__factory } from "../../typechain/factories/PollProcessorAndTallyer__factory";
+import { Verifier__factory } from "../../typechain/factories/Verifier__factory";
 
 async function main() {
   const [deployer] = await ethers.getSigners();

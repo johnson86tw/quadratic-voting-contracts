@@ -1,7 +1,7 @@
 import { ethers } from "hardhat";
 
-import { PollProcessorAndTallyer__factory } from "../typechain/factories/PollProcessorAndTallyer__factory";
-import { Verifier__factory } from "../typechain/factories/Verifier__factory";
+import { PollProcessorAndTallyer__factory } from "../../typechain/factories/PollProcessorAndTallyer__factory";
+import { Verifier__factory } from "../../typechain/factories/Verifier__factory";
 
 async function main() {
   const [deployer] = await ethers.getSigners();
