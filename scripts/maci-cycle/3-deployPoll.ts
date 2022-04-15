@@ -6,7 +6,7 @@ import { Addresses } from "../../ts/interfaces";
 import { MACI__factory } from "../../typechain/factories/MACI__factory";
 import { checkEnvFile } from "../../ts/utils";
 
-const duration = 300; // 5 min
+const duration = 600;
 
 // .env
 const coordinatorPubKey = process.env.COORDINATOR_PUB_KEY as string;
@@ -50,34 +50,20 @@ async function main() {
       addresses.poseidonT4,
   };
 
-  for (const [, value] of Object.entries(maxValues)) {
-    if (!value) {
-      throw new Error("Please provide correct maxValues");
-    }
-  }
-  for (const [, value] of Object.entries(treeDepths)) {
-    if (!value) {
-      throw new Error("Please provide correct treeDepths");
-    }
-  }
-
   const maci = new MACI__factory(
     { ...linkedLibraryAddresses },
     deployer
   ).attach(addresses.maci);
 
-  const { logs } = await maci
-    .connect(deployer)
-    .deployPoll(
-      duration,
-      maxValues,
-      treeDepths,
-      _coordinatorPubKey.asContractParam(),
-      {
-        gasLimit: 30000000,
-      }
-    )
-    .then((tx) => tx.wait());
+  console.log("Deploying Poll contract...");
+  const tx = await maci.deployPoll(
+    duration,
+    maxValues,
+    treeDepths,
+    _coordinatorPubKey.asContractParam(),
+    { gasLimit: 30000000 }
+  );
+  const { logs } = await tx.wait();
 
   const iface = maci.interface;
   const deployPollEvent = iface.parseLog(logs[logs.length - 1]);
@@ -85,7 +71,7 @@ async function main() {
   const pollAddr = deployPollEvent.args._pollAddr.toString();
   const coordinatorPubKeyEventArg = deployPollEvent.args._pubKey.toString();
 
-  console.log(`Successfully deploy poll contract with poll_id: ${pollId}`);
+  console.log(`Successfully deployed poll contract with poll_id: ${pollId}`);
   console.log(`poll address: ${pollAddr}`);
   console.log(
     `coordinator public key: ${coordinatorPubKeyEventArg}` // TODO: how to serialize this?

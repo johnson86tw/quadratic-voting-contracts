@@ -82,11 +82,12 @@ async function main() {
   const _message = message.asContractParam();
   const _encPubKey = userKeypair.pubKey.asContractParam();
 
-  const { logs } = await poll
-    .connect(deployer)
-    // @ts-ignore
-    .publishMessage(_message, _encPubKey)
-    .then((tx) => tx.wait());
+  console.log("Start publishing message...");
+  // @ts-ignore
+  const tx = await poll.publishMessage(_message, _encPubKey, {
+    gasLimit: 30000000,
+  });
+  const { logs } = await tx.wait();
 
   const iface = poll.interface;
   const PublishMessageEvent = iface.parseLog(logs[logs.length - 1]);
@@ -95,7 +96,7 @@ async function main() {
   const messageEventArg = PublishMessageEvent.args._message.toString();
   const encPubKeyEventArg = PublishMessageEvent.args._encPubKey.toString();
 
-  console.log("Successfully publish message");
+  console.log("Successfully published message");
 }
 
 main().catch((error) => {
