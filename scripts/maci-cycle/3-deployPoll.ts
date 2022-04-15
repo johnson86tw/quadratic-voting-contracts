@@ -11,7 +11,6 @@ const duration = 600;
 // .env
 const coordinatorPubKey = process.env.COORDINATOR_PUB_KEY as string;
 const maxValues = {
-  maxUsers: process.env.MAX_USERS as string,
   maxMessages: process.env.MAX_MESSAGES as string,
   maxVoteOptions: process.env.MAX_VOTE_OPTIONS as string,
 };
@@ -56,26 +55,29 @@ async function main() {
   ).attach(addresses.maci);
 
   console.log("Deploying Poll contract...");
-  const tx = await maci.deployPoll(
-    duration,
-    maxValues,
-    treeDepths,
-    _coordinatorPubKey.asContractParam(),
-    { gasLimit: 30000000 }
-  );
-  const { logs } = await tx.wait();
+  try {
+    const tx = await maci.deployPoll(
+      duration,
+      maxValues,
+      treeDepths,
+      _coordinatorPubKey.asContractParam()
+    );
+    const { logs } = await tx.wait();
+    const iface = maci.interface;
+    const deployPollEvent = iface.parseLog(logs[logs.length - 1]);
+    const pollId = deployPollEvent.args._pollId.toString();
+    const pollAddr = deployPollEvent.args._pollAddr.toString();
+    const coordinatorPubKeyEventArg = deployPollEvent.args._pubKey.toString();
 
-  const iface = maci.interface;
-  const deployPollEvent = iface.parseLog(logs[logs.length - 1]);
-  const pollId = deployPollEvent.args._pollId.toString();
-  const pollAddr = deployPollEvent.args._pollAddr.toString();
-  const coordinatorPubKeyEventArg = deployPollEvent.args._pubKey.toString();
-
-  console.log(`Successfully deployed poll contract with poll_id: ${pollId}`);
-  console.log(`poll address: ${pollAddr}`);
-  console.log(
-    `coordinator public key: ${coordinatorPubKeyEventArg}` // TODO: how to serialize this?
-  );
+    console.log(`Successfully deployed poll contract with poll_id: ${pollId}`);
+    console.log("Poll ID:", pollId.toString());
+    console.log("Poll contract:", pollAddr);
+    console.log(
+      `coordinator public key: ${coordinatorPubKeyEventArg}` // TODO: how to serialize this?
+    );
+  } catch (e: any) {
+    throw new Error(e.error);
+  }
 }
 
 main().catch((error) => {

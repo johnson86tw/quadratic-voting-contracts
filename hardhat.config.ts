@@ -17,6 +17,7 @@ const config: HardhatUserConfig = {
     version: "0.7.2",
     settings: {
       // why this works for deploying on testnet?
+      // https://docs.soliditylang.org/en/latest/internals/optimizer.html#optimizer-parameter-runs
       optimizer: {
         enabled: true,
         runs: 200,

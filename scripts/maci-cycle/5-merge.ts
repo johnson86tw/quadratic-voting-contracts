@@ -5,7 +5,7 @@ import { Addresses } from "../../ts/interfaces";
 import { Poll__factory } from "../../typechain/factories/Poll__factory";
 import { MACI__factory } from "../../typechain/factories/MACI__factory";
 
-const pollId = 0;
+const pollId = 1;
 
 const deploymentFileName = `deployment-${hre.network.name}.json`;
 const deploymentPath = path.join(
@@ -43,11 +43,26 @@ async function main() {
     deployer
   ).attach(pollAddress);
 
-  await poll.mergeMaciStateAqSubRoots(0, 0);
-  await poll.mergeMaciStateAq(0);
+  console.log("Merging...");
 
-  await poll.mergeMessageAqSubRoots(0);
-  await poll.mergeMessageAq();
+  try {
+    const mergeMaciStateAqSubRootsTx = await poll.mergeMaciStateAqSubRoots(
+      0,
+      0
+    );
+    await mergeMaciStateAqSubRootsTx.wait();
+
+    const mergeMaciStateAqTx = await poll.mergeMaciStateAq(0);
+    await mergeMaciStateAqTx.wait();
+
+    const mergeMessageAqSubRootsTx = await poll.mergeMessageAqSubRoots(0);
+    await mergeMessageAqSubRootsTx.wait();
+
+    const mergeMessageAqTx = await poll.mergeMessageAq();
+    await mergeMessageAqTx.wait();
+  } catch (e: any) {
+    throw new Error(e.error);
+  }
 
   console.log("Successfully merged.");
 }
