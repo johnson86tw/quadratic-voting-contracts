@@ -18,6 +18,13 @@ import { AccQueueQuinaryMaci__factory } from "../../typechain/factories/AccQueue
 import { PollProcessorAndTallyer__factory } from "../../typechain/factories/PollProcessorAndTallyer__factory";
 import { Verifier__factory } from "../../typechain/factories/Verifier__factory";
 
+const deploymentFileName = `deployment-${hre.network.name}.json`;
+const deploymentPath = path.join(
+  __dirname,
+  "../../deployment",
+  deploymentFileName
+);
+
 async function main() {
   const [deployer] = await ethers.getSigners();
 
@@ -95,12 +102,7 @@ async function main() {
     ppt: pollProcessorAndTallyer.address,
   };
 
-  const jsonPath = path.join(
-    __dirname,
-    "..",
-    `deployment-${hre.network.name}.json`
-  );
-  fs.writeFileSync(jsonPath, JSON.stringify(addresses));
+  fs.writeFileSync(deploymentPath, JSON.stringify(addresses));
 }
 
 main().catch((error) => {
