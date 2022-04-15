@@ -1,4 +1,4 @@
-import hre, { ethers } from "hardhat";
+import hre from "hardhat";
 import fs from "fs";
 import path from "path";
 import shelljs from "shelljs";
