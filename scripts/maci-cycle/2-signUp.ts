@@ -1,23 +1,26 @@
 import hre, { ethers } from "hardhat";
 import path from "path";
 import fs from "fs";
-import { Addresses } from "../ts/interfaces";
+import { Addresses } from "../../ts/interfaces";
+import { Keypair, PrivKey } from "maci-domainobjs";
+import { MACI__factory } from "../../typechain/factories/MACI__factory";
+import { checkEnvFile } from "../../ts/utils";
 
-import { Keypair, PrivKey, PubKey } from "maci-domainobjs";
+const userPrivKey = process.env.USER_PRIV_KEY as string;
 
-import { MACI__factory } from "../typechain/factories/MACI__factory";
+const deploymentFileName = `deployment-${hre.network.name}.json`;
+const deploymentPath = path.join(
+  __dirname,
+  "../../deployment",
+  deploymentFileName
+);
 
 async function main() {
-  const [deployer, user1] = await ethers.getSigners();
+  checkEnvFile("USER_PRIV_KEY");
+  const [deployer] = await ethers.getSigners();
 
-  const userPrivKey = process.env.userPrivKey;
-  if (!userPrivKey) {
-    throw new Error("Please provide correct private key in .env file");
-  }
   const userKeypair = new Keypair(PrivKey.unserialize(userPrivKey));
 
-  const deploymentFileName = `deployment-${hre.network.name}.json`;
-  const deploymentPath = path.join(__dirname, "..", deploymentFileName);
   const addresses = JSON.parse(
     fs.readFileSync(deploymentPath).toString()
   ) as Addresses;
@@ -49,7 +52,7 @@ async function main() {
   );
 
   const { logs } = await maci
-    .connect(user1)
+    .connect(deployer)
     .signUp(_pubKey, _signUpGatekeeperData, _initialVoiceCreditProxyData)
     .then((tx) => tx.wait());
 

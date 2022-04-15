@@ -1,9 +1,9 @@
-const checkEnvFile = () => {
+const checkEnvFile = (...args: string[]) => {
   const envs = {
     COORDINATOR_PRIV_KEY: process.env.COORDINATOR_PRIV_KEY,
     COORDINATOR_PUB_KEY: process.env.COORDINATOR_PUB_KEY,
 
-    USERPRIVKEY: process.env.USERPRIVKEY,
+    USER_PRIV_KEY: process.env.USER_PRIV_KEY,
 
     MAX_USERS: process.env.MAX_USERS,
     MAX_MESSAGES: process.env.MAX_MESSAGES,
@@ -20,9 +20,18 @@ const checkEnvFile = () => {
     POLL_ID: process.env.POLL_ID,
   };
 
-  for (const [key, value] of Object.entries(envs)) {
-    if (!value) {
-      throw new Error(`Invalid .env file of ${key}`);
+  if (args.length > 0) {
+    args.forEach((key) => {
+      if (!envs[key as keyof typeof envs]) {
+        throw new Error(`Invalid .env file of ${key}`);
+      }
+    });
+  } else {
+    // check all
+    for (const [key, value] of Object.entries(envs)) {
+      if (!value) {
+        throw new Error(`Invalid .env file of ${key}`);
+      }
     }
   }
 };
