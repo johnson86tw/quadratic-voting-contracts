@@ -1,33 +1,35 @@
 import hre, { ethers } from "hardhat";
 import fs from "fs";
 import path from "path";
-import { Addresses } from "../ts/interfaces";
 import { Command, Keypair, PrivKey, PubKey } from "maci-domainobjs";
-import { Poll__factory } from "../typechain/factories/Poll__factory";
-import { MACI__factory } from "../typechain/factories/MACI__factory";
+import { Addresses } from "../../ts/interfaces";
+import { Poll__factory } from "../../typechain/factories/Poll__factory";
+import { MACI__factory } from "../../typechain/factories/MACI__factory";
+import { checkEnvFile } from "../../ts/utils";
 
 const stateIndex = 1;
 const pollId = 0;
 const voteWeight = 3;
 const voteOptionIndex = 1;
 
+// .env
+const userPrivKey = process.env.USER_PRIV_KEY as string;
+const coordinatorPubKey = process.env.COORDINATOR_PUB_KEY as string;
+
+const deploymentFileName = `deployment-${hre.network.name}.json`;
+const deploymentPath = path.join(
+  __dirname,
+  "../../deployment",
+  deploymentFileName
+);
+
 async function main() {
-  const [deployer, user1] = await ethers.getSigners();
+  checkEnvFile("USER_PRIV_KEY", "COORDINATOR_PUB_KEY");
+  const [deployer] = await ethers.getSigners();
 
-  const userPrivKey = process.env.userPrivKey;
-  if (!userPrivKey) {
-    throw new Error("Please provide correct maci private key");
-  }
   const userKeypair = new Keypair(PrivKey.unserialize(userPrivKey));
+  const _coordinatorPubKey = PubKey.unserialize(coordinatorPubKey);
 
-  const _coordinatorPubKey = process.env.coordinatorPubKey;
-  if (!_coordinatorPubKey) {
-    throw new Error("Please provide coordinator maci public key");
-  }
-  const coordinatorPubKey = PubKey.unserialize(_coordinatorPubKey);
-
-  const deploymentFileName = `deployment-${hre.network.name}.json`;
-  const deploymentPath = path.join(__dirname, "..", deploymentFileName);
   const addresses = JSON.parse(
     fs.readFileSync(deploymentPath).toString()
   ) as Addresses;
@@ -74,20 +76,22 @@ async function main() {
   const signature = command.sign(userKeypair.privKey);
   const sharedKey = Keypair.genEcdhSharedKey(
     userKeypair.privKey,
-    coordinatorPubKey
+    _coordinatorPubKey
   );
   const message = command.encrypt(signature, sharedKey);
   const _message = message.asContractParam();
   const _encPubKey = userKeypair.pubKey.asContractParam();
 
   const { logs } = await poll
-    .connect(user1)
+    .connect(deployer)
     // @ts-ignore
     .publishMessage(_message, _encPubKey)
     .then((tx) => tx.wait());
 
   const iface = poll.interface;
   const PublishMessageEvent = iface.parseLog(logs[logs.length - 1]);
+
+  // note: can use these to get user's voice credit balance?
   const messageEventArg = PublishMessageEvent.args._message.toString();
   const encPubKeyEventArg = PublishMessageEvent.args._encPubKey.toString();
 

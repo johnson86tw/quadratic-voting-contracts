@@ -1,8 +1,8 @@
 import hre, { ethers } from "hardhat";
 import fs from "fs";
 import path from "path";
-import { Addresses } from "../ts/interfaces";
-import proveOnChain from "../ts/proveOnChain";
+import { Addresses } from "../../ts/interfaces";
+import proveOnChain from "../../ts/proveOnChain";
 import {
   MACI__factory,
   PollProcessorAndTallyer__factory,
@@ -10,26 +10,21 @@ import {
   Poll__factory,
   Verifier__factory,
   VkRegistry__factory,
-} from "../typechain";
+} from "../../typechain";
 
 const pollId = 0;
-const proofDirPath = path.join(__dirname, "..", "proofs");
+const proofDirPath = path.join(__dirname, "../../", "proofs");
+
+const deploymentFileName = `deployment-${hre.network.name}.json`;
+const deploymentPath = path.join(
+  __dirname,
+  "../../deployment",
+  deploymentFileName
+);
 
 async function main() {
   const [deployer] = await ethers.getSigners();
 
-  const userPrivKey = process.env.userPrivKey;
-  if (!userPrivKey) {
-    throw new Error("Please provide correct maci private key");
-  }
-
-  const _coordinatorPubKey = process.env.coordinatorPubKey;
-  if (!_coordinatorPubKey) {
-    throw new Error("Please provide coordinator maci public key");
-  }
-
-  const deploymentFileName = `deployment-${hre.network.name}.json`;
-  const deploymentPath = path.join(__dirname, "..", deploymentFileName);
   const addresses = JSON.parse(
     fs.readFileSync(deploymentPath).toString()
   ) as Addresses;

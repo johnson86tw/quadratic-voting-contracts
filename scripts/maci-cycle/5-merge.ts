@@ -1,18 +1,22 @@
 import hre, { ethers } from "hardhat";
 import fs from "fs";
 import path from "path";
-import { Addresses } from "../ts/interfaces";
-
-import { Poll__factory } from "../typechain/factories/Poll__factory";
-import { MACI__factory } from "../typechain/factories/MACI__factory";
+import { Addresses } from "../../ts/interfaces";
+import { Poll__factory } from "../../typechain/factories/Poll__factory";
+import { MACI__factory } from "../../typechain/factories/MACI__factory";
 
 const pollId = 0;
+
+const deploymentFileName = `deployment-${hre.network.name}.json`;
+const deploymentPath = path.join(
+  __dirname,
+  "../../deployment",
+  deploymentFileName
+);
 
 async function main() {
   const [deployer] = await ethers.getSigners();
 
-  const deploymentFileName = `deployment-${hre.network.name}.json`;
-  const deploymentPath = path.join(__dirname, "..", deploymentFileName);
   const addresses = JSON.parse(
     fs.readFileSync(deploymentPath).toString()
   ) as Addresses;
@@ -44,7 +48,8 @@ async function main() {
 
   await poll.mergeMessageAqSubRoots(0);
   await poll.mergeMessageAq();
-  console.log("Successfully merged");
+
+  console.log("Successfully merged.");
 }
 
 main().catch((error) => {

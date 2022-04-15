@@ -1,24 +1,40 @@
 import hre, { ethers } from "hardhat";
 import fs from "fs";
 import path from "path";
-import { Addresses } from "../ts/interfaces";
 import { PubKey } from "maci-domainobjs";
-import { MACI__factory } from "../typechain/factories/MACI__factory";
+import { Addresses } from "../../ts/interfaces";
+import { MACI__factory } from "../../typechain/factories/MACI__factory";
+import { checkEnvFile } from "../../ts/utils";
 
-const duration = 10000;
+const duration = 300; // 5 min
+
+// .env
+const coordinatorPubKey = process.env.COORDINATOR_PUB_KEY as string;
+const maxValues = {
+  maxUsers: process.env.MAX_USERS as string,
+  maxMessages: process.env.MAX_MESSAGES as string,
+  maxVoteOptions: process.env.MAX_VOTE_OPTIONS as string,
+};
+const treeDepths = {
+  intStateTreeDepth: process.env.INT_STATE_TREE_DEPTH as string,
+  messageTreeDepth: process.env.MESSAGE_TREE_DEPTH as string,
+  messageTreeSubDepth: process.env.MESSAGE_TREE_SUB_DEPTH as string,
+  voteOptionTreeDepth: process.env.VOTE_OPTION_TREE_DEPTH as string,
+};
+
+const deploymentFileName = `deployment-${hre.network.name}.json`;
+const deploymentPath = path.join(
+  __dirname,
+  "../../deployment",
+  deploymentFileName
+);
 
 async function main() {
+  checkEnvFile();
   const [deployer] = await ethers.getSigners();
 
-  const _coordinatorPubKey = process.env.coordinatorPubKey;
-  if (!_coordinatorPubKey) {
-    throw new Error("Please provide coordinator public key");
-  }
-  const coordinatorPubKey = PubKey.unserialize(_coordinatorPubKey);
+  const _coordinatorPubKey = PubKey.unserialize(coordinatorPubKey);
 
-  // addresses
-  const deploymentFileName = `deployment-${hre.network.name}.json`;
-  const deploymentPath = path.join(__dirname, "..", deploymentFileName);
   const addresses = JSON.parse(
     fs.readFileSync(deploymentPath).toString()
   ) as Addresses;
@@ -32,19 +48,6 @@ async function main() {
       addresses.poseidonT6,
     ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT4"]:
       addresses.poseidonT4,
-  };
-
-  // settings
-  const maxValues = {
-    maxUsers: process.env.maxUsers as string,
-    maxMessages: process.env.maxMessages as string,
-    maxVoteOptions: process.env.maxVoteOptions as string,
-  };
-  const treeDepths = {
-    intStateTreeDepth: process.env.intStateTreeDepth as string,
-    messageTreeDepth: process.env.messageTreeDepth as string,
-    messageTreeSubDepth: process.env.messageTreeSubDepth as string,
-    voteOptionTreeDepth: process.env.voteOptionTreeDepth as string,
   };
 
   for (const [, value] of Object.entries(maxValues)) {
@@ -69,7 +72,7 @@ async function main() {
       duration,
       maxValues,
       treeDepths,
-      coordinatorPubKey.asContractParam(),
+      _coordinatorPubKey.asContractParam(),
       {
         gasLimit: 30000000,
       }
