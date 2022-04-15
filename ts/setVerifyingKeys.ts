@@ -38,8 +38,6 @@ const setVerifyingKeys = async (
   );
   const tallyVk: VerifyingKey = VerifyingKey.fromObj(extractVk(tallyZkeyFile));
 
-  console.log("Successfully extract verifying key");
-
   // Simple validation
   if (
     treeDepths.stateTreeDepth < 1 ||

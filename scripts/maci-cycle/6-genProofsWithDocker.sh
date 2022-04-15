@@ -13,9 +13,9 @@ else
 fi
 
 docker-compose run maci node build/index.js genProofs \
-    --contract $maci \
-    --privkey $coordinatorPrivKey \
-    --poll-id $pollId \
+    --contract $MACI \
+    --privkey $COORDINATOR_PRIV_KEY \
+    --poll-id $POLL_ID \
     --tally-file proofs/tally.json \
     --output proofs \
     --rapidsnark /root/rapidsnark/build/prover \
