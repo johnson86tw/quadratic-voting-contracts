@@ -5,7 +5,7 @@ import shelljs from "shelljs";
 import { Addresses } from "../../ts/interfaces";
 import { checkEnvFile } from "../../ts/utils";
 
-const pollId = 0;
+const pollId = 1;
 
 const coordinatorPrivKey = process.env.COORDINATOR_PRIV_KEY as string;
 
@@ -16,6 +16,8 @@ const deploymentPath = path.join(
   deploymentFileName
 );
 
+const defaultsPath = path.join(__dirname, "../../maci-cli-defaults");
+
 async function main() {
   checkEnvFile("COORDINATOR_PRIV_KEY");
 
@@ -23,7 +25,13 @@ async function main() {
     fs.readFileSync(deploymentPath).toString()
   ) as Addresses;
 
-  const cmd = `docker-compose run maci node build/index.js genProofs \
+  let volume = `${defaultsPath}/localhost/defaults.js:/root/maci/cli/build/defaults.js`;
+  if (hre.network.name !== "localhost") {
+    // TODO: should check file exist
+    volume = `${defaultsPath}/defaults.js:/root/maci/cli/build/defaults.js`;
+  }
+
+  const cmd = `docker-compose run --volume=${volume} maci node build/index.js genProofs \
     --contract ${addresses.maci} \
     --privkey ${coordinatorPrivKey} \
     --poll-id ${pollId} \

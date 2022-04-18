@@ -63,13 +63,6 @@ async function main() {
     deployer
   ).deploy(pollFactory.address, qv.address, qv.address);
 
-  // why do this?
-  const stateAqAddress = await maci.stateAq();
-  const stateAq = new AccQueueQuinaryMaci__factory(
-    { ...linkedLibraryAddresses },
-    deployer
-  ).attach(stateAqAddress);
-
   // transfer ownership
   await pollFactory.transferOwnership(maci.address);
   await messageAqFactory.transferOwnership(pollFactory.address);
@@ -97,7 +90,6 @@ async function main() {
     vkRegistry: vkRegistry.address,
     pollFactory: pollFactory.address,
     messageAqFactory: messageAqFactory.address,
-    stateAq: stateAq.address,
     maci: maci.address,
     ppt: pollProcessorAndTallyer.address,
   };

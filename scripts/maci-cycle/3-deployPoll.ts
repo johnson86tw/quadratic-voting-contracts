@@ -55,29 +55,26 @@ async function main() {
   ).attach(addresses.maci);
 
   console.log("Deploying Poll contract...");
-  try {
-    const tx = await maci.deployPoll(
-      duration,
-      maxValues,
-      treeDepths,
-      _coordinatorPubKey.asContractParam()
-    );
-    const { logs } = await tx.wait();
-    const iface = maci.interface;
-    const deployPollEvent = iface.parseLog(logs[logs.length - 1]);
-    const pollId = deployPollEvent.args._pollId.toString();
-    const pollAddr = deployPollEvent.args._pollAddr.toString();
-    const coordinatorPubKeyEventArg = deployPollEvent.args._pubKey.toString();
 
-    console.log(`Successfully deployed poll contract with poll_id: ${pollId}`);
-    console.log("Poll ID:", pollId.toString());
-    console.log("Poll contract:", pollAddr);
-    console.log(
-      `coordinator public key: ${coordinatorPubKeyEventArg}` // TODO: how to serialize this?
-    );
-  } catch (e: any) {
-    throw new Error(e.error);
-  }
+  const tx = await maci.deployPoll(
+    duration,
+    maxValues,
+    treeDepths,
+    _coordinatorPubKey.asContractParam()
+  );
+  const { logs } = await tx.wait();
+  const iface = maci.interface;
+  const deployPollEvent = iface.parseLog(logs[logs.length - 1]);
+  const pollId = deployPollEvent.args._pollId.toString();
+  const pollAddr = deployPollEvent.args._pollAddr.toString();
+  const coordinatorPubKeyEventArg = deployPollEvent.args._pubKey.toString();
+
+  console.log(`Successfully deployed poll contract with poll_id: ${pollId}`);
+  console.log("Poll ID:", pollId.toString());
+  console.log("Poll contract:", pollAddr);
+  console.log(
+    `coordinator public key: ${coordinatorPubKeyEventArg}` // TODO: how to serialize this?
+  );
 }
 
 main().catch((error) => {

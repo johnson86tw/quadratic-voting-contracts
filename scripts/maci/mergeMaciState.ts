@@ -1,19 +1,13 @@
 import hre, { ethers } from "hardhat";
 import fs from "fs";
 import path from "path";
-import { Keypair, PrivKey } from "maci-domainobjs";
 import { Addresses } from "../../ts/interfaces";
-import { checkEnvFile } from "../../ts/utils";
-import {
-  MACI__factory,
-  Poll__factory,
-  AccQueueQuinaryMaci__factory,
-} from "../../typechain";
+import { Poll__factory } from "../../typechain/factories/Poll__factory";
+import { MACI__factory } from "../../typechain/factories/MACI__factory";
+import { AccQueueQuinaryMaci__factory } from "../../typechain";
+import { mergeMaciState } from "../../ts/merge";
 
 const pollId = 0;
-
-// .env
-const userPrivKey = process.env.USER_PRIV_KEY as string;
 
 const deploymentFileName = `deployment-${hre.network.name}.json`;
 const deploymentPath = path.join(
@@ -23,10 +17,7 @@ const deploymentPath = path.join(
 );
 
 async function main() {
-  checkEnvFile("USER_PRIV_KEY", "COORDINATOR_PUB_KEY");
   const [deployer] = await ethers.getSigners();
-
-  const userKeypair = new Keypair(PrivKey.unserialize(userPrivKey));
 
   const addresses = JSON.parse(
     fs.readFileSync(deploymentPath).toString()
@@ -54,16 +45,15 @@ async function main() {
     deployer
   ).attach(pollAddress);
 
-  const messageAqAddress = (await poll.extContracts()).messageAq;
-  const messageAq = new AccQueueQuinaryMaci__factory(
+  const stateAqAddress = await maci.stateAq();
+  const stateAq = new AccQueueQuinaryMaci__factory(
     { ...linkedLibraryAddresses },
     deployer
-  ).attach(messageAqAddress);
+  ).attach(stateAqAddress);
 
-  console.log("Poll ID:", pollId);
-  console.log("isAfterDeadline:", await poll.isAfterDeadline());
-  console.log("messageAq.subTreesMerged:", await messageAq.subTreesMerged());
-  console.log("messageAq.treeMerged:", await messageAq.treeMerged());
+  console.log("Merging...");
+
+  await mergeMaciState(deployer.provider!, maci, poll, pollId, stateAq);
 }
 
 main().catch((error) => {

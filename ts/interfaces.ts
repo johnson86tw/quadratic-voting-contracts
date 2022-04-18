@@ -6,7 +6,6 @@ interface Addresses {
   vkRegistry: string;
   pollFactory: string;
   messageAqFactory: string;
-  stateAq: string;
   maci: string;
   ppt: string;
   qv?: string;

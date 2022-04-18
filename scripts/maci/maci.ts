@@ -3,6 +3,8 @@ import path from "path";
 import fs from "fs";
 import { Addresses } from "../../ts/interfaces";
 import { MACI__factory } from "../../typechain/factories/MACI__factory";
+import { AccQueue } from "maci-crypto";
+import { AccQueueQuinaryMaci__factory } from "../../typechain";
 
 const deploymentFileName = `deployment-${hre.network.name}.json`;
 const deploymentPath = path.join(
@@ -33,6 +35,15 @@ async function main() {
     { ...linkedLibraryAddresses },
     deployer
   ).attach(addresses.maci);
+
+  const stateAqAddress = await maci.stateAq();
+  const stateAq = new AccQueueQuinaryMaci__factory(
+    { ...linkedLibraryAddresses },
+    deployer
+  ).attach(stateAqAddress);
+
+  console.log("stateAq.subTreesMerged:", await stateAq.subTreesMerged());
+  console.log("stateAq.treeMerged:", await stateAq.treeMerged());
 }
 
 main().catch((error) => {

@@ -11,6 +11,6 @@ artifacts
 # maci docker volume
 zkeys
 proofs
-
+maci-cli-defaults/defaults.js
 
 

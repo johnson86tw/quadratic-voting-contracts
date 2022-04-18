@@ -2,8 +2,12 @@ import hre, { ethers } from "hardhat";
 import fs from "fs";
 import path from "path";
 import { Addresses } from "../../ts/interfaces";
-import { Poll__factory } from "../../typechain/factories/Poll__factory";
-import { MACI__factory } from "../../typechain/factories/MACI__factory";
+import {
+  MACI__factory,
+  Poll__factory,
+  AccQueueQuinaryMaci__factory,
+} from "../../typechain/";
+import { mergeMaciState, mergeMessage } from "../../ts/merge";
 
 const pollId = 1;
 
@@ -43,26 +47,22 @@ async function main() {
     deployer
   ).attach(pollAddress);
 
+  const stateAqAddress = await maci.stateAq();
+  const stateAq = new AccQueueQuinaryMaci__factory(
+    { ...linkedLibraryAddresses },
+    deployer
+  ).attach(stateAqAddress);
+
+  const messageAqAddress = (await poll.extContracts()).messageAq;
+  const messageAq = new AccQueueQuinaryMaci__factory(
+    { ...linkedLibraryAddresses },
+    deployer
+  ).attach(messageAqAddress);
+
   console.log("Merging...");
 
-  try {
-    const mergeMaciStateAqSubRootsTx = await poll.mergeMaciStateAqSubRoots(
-      0,
-      0
-    );
-    await mergeMaciStateAqSubRootsTx.wait();
-
-    const mergeMaciStateAqTx = await poll.mergeMaciStateAq(0);
-    await mergeMaciStateAqTx.wait();
-
-    const mergeMessageAqSubRootsTx = await poll.mergeMessageAqSubRoots(0);
-    await mergeMessageAqSubRootsTx.wait();
-
-    const mergeMessageAqTx = await poll.mergeMessageAq();
-    await mergeMessageAqTx.wait();
-  } catch (e: any) {
-    throw new Error(e.error);
-  }
+  await mergeMaciState(deployer.provider!, maci, poll, pollId, stateAq);
+  await mergeMessage(deployer, poll, messageAq);
 
   console.log("Successfully merged.");
 }
