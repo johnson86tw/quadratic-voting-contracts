@@ -3,9 +3,9 @@ import fs from "fs";
 import path from "path";
 import shelljs from "shelljs";
 import { Addresses } from "../../ts/interfaces";
-import { checkEnvFile } from "../../ts/utils";
+import { checkDeployment, checkEnvFile } from "../../ts/utils";
 
-const pollId = 1;
+const pollId = 0;
 
 const coordinatorPrivKey = process.env.COORDINATOR_PRIV_KEY as string;
 
@@ -24,6 +24,7 @@ async function main() {
   const addresses = JSON.parse(
     fs.readFileSync(deploymentPath).toString()
   ) as Addresses;
+  checkDeployment(addresses);
 
   let volume = `${defaultsPath}/localhost/defaults.js:/root/maci/cli/build/defaults.js`;
   if (hre.network.name !== "localhost") {

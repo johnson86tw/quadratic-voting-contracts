@@ -3,6 +3,7 @@ import path from "path";
 import fs from "fs";
 import { Addresses } from "../../ts/interfaces";
 import { MACI__factory } from "../../typechain";
+import { checkDeployment } from "../../ts/utils";
 
 const deploymentFileName = `deployment-${hre.network.name}.json`;
 const deploymentPath = path.join(
@@ -17,11 +18,7 @@ async function main() {
   let addresses = JSON.parse(
     fs.readFileSync(deploymentPath).toString()
   ) as Addresses;
-
-  // TODO: should check addresses being valid
-  if (!addresses.qv) {
-    throw new Error("Incorrect deployment addresses");
-  }
+  checkDeployment(addresses, "maci", "ppt");
 
   const linkedLibraryAddresses = {
     ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT5"]:
@@ -40,7 +37,7 @@ async function main() {
   const maci = await new MACI__factory(
     { ...linkedLibraryAddresses },
     deployer
-  ).deploy(addresses.pollFactory, addresses.qv, addresses.qv);
+  ).deploy(addresses.pollFactory, addresses.qv!, addresses.qv!);
   await maci.deployed();
   console.log(`Successfully deployed MACI at ${maci.address}`);
 

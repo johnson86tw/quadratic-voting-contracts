@@ -3,7 +3,7 @@ import path from "path";
 import fs from "fs";
 import setVerifyingKeys from "../../ts/setVerifyingKeys";
 import { Addresses } from "../../ts/interfaces";
-import { checkEnvFile } from "../../ts/utils";
+import { checkDeployment, checkEnvFile } from "../../ts/utils";
 
 import { VkRegistry__factory } from "../../typechain/factories/VkRegistry__factory";
 
@@ -34,6 +34,7 @@ async function main() {
   let addresses = JSON.parse(
     fs.readFileSync(deploymentPath).toString()
   ) as Addresses;
+  checkDeployment(addresses);
 
   const vkRegistry = new VkRegistry__factory(deployer).attach(
     addresses.vkRegistry

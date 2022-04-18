@@ -1,3 +1,5 @@
+import { Addresses } from "./interfaces";
+
 const checkEnvFile = (...args: string[]) => {
   const envs = {
     COORDINATOR_PRIV_KEY: process.env.COORDINATOR_PRIV_KEY,
@@ -36,4 +38,15 @@ const checkEnvFile = (...args: string[]) => {
   }
 };
 
-export { checkEnvFile };
+const checkDeployment = (addresses: Addresses, ...exclude: string[]) => {
+  for (const [key, value] of Object.entries(addresses)) {
+    if (exclude && exclude.includes(key)) {
+      return;
+    }
+    if (!value) {
+      throw new Error(`Invalid contract address of ${key}`);
+    }
+  }
+};
+
+export { checkEnvFile, checkDeployment };

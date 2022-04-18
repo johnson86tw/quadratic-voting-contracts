@@ -3,7 +3,6 @@ import path from "path";
 import fs from "fs";
 import { Addresses } from "../../ts/interfaces";
 import { MACI__factory } from "../../typechain/factories/MACI__factory";
-import { AccQueue } from "maci-crypto";
 import { AccQueueQuinaryMaci__factory } from "../../typechain";
 
 const deploymentFileName = `deployment-${hre.network.name}.json`;

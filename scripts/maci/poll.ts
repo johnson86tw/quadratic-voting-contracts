@@ -10,7 +10,7 @@ import {
   AccQueueQuinaryMaci__factory,
 } from "../../typechain";
 
-const pollId = 1;
+const pollId = 0;
 
 // .env
 const userPrivKey = process.env.USER_PRIV_KEY as string;

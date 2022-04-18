@@ -6,6 +6,7 @@ import { verifyTallyResult } from "../../ts/maci";
 import { MACI__factory } from "../../typechain/factories/MACI__factory";
 import { PollProcessorAndTallyer__factory } from "../../typechain/factories/PollProcessorAndTallyer__factory";
 import { Poll__factory } from "../../typechain";
+import { checkDeployment } from "../../ts/utils";
 
 const pollId = 0;
 const tallyFilePath = path.join(__dirname, "../../", "proofs/tally.json");
@@ -23,6 +24,7 @@ async function main() {
   const addresses = JSON.parse(
     fs.readFileSync(deploymentPath).toString()
   ) as Addresses;
+  checkDeployment(addresses);
 
   const linkedLibraryAddresses = {
     ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT5"]:

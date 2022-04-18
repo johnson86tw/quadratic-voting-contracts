@@ -11,6 +11,7 @@ import {
   Verifier__factory,
   VkRegistry__factory,
 } from "../../typechain";
+import { checkDeployment } from "../../ts/utils";
 
 const pollId = 0;
 const proofDirPath = path.join(__dirname, "../../", "proofs");
@@ -28,6 +29,7 @@ async function main() {
   const addresses = JSON.parse(
     fs.readFileSync(deploymentPath).toString()
   ) as Addresses;
+  checkDeployment(addresses);
 
   const linkedLibraryAddresses = {
     ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT5"]:

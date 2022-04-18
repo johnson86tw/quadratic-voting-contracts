@@ -4,7 +4,7 @@ import fs from "fs";
 import { Addresses } from "../../ts/interfaces";
 import { Keypair, PrivKey } from "maci-domainobjs";
 import { MACI__factory } from "../../typechain/factories/MACI__factory";
-import { checkEnvFile } from "../../ts/utils";
+import { checkDeployment, checkEnvFile } from "../../ts/utils";
 
 const userPrivKey = process.env.USER_PRIV_KEY as string;
 
@@ -24,6 +24,7 @@ async function main() {
   const addresses = JSON.parse(
     fs.readFileSync(deploymentPath).toString()
   ) as Addresses;
+  checkDeployment(addresses);
 
   const linkedLibraryAddresses = {
     ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT5"]:

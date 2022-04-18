@@ -4,7 +4,7 @@ import path from "path";
 import { PubKey } from "maci-domainobjs";
 import { Addresses } from "../../ts/interfaces";
 import { MACI__factory } from "../../typechain/factories/MACI__factory";
-import { checkEnvFile } from "../../ts/utils";
+import { checkDeployment, checkEnvFile } from "../../ts/utils";
 
 const duration = 300;
 
@@ -37,6 +37,7 @@ async function main() {
   const addresses = JSON.parse(
     fs.readFileSync(deploymentPath).toString()
   ) as Addresses;
+  checkDeployment(addresses);
 
   const linkedLibraryAddresses = {
     ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT5"]:

@@ -5,7 +5,7 @@ import { Command, Keypair, PrivKey, PubKey } from "maci-domainobjs";
 import { Addresses } from "../../ts/interfaces";
 import { Poll__factory } from "../../typechain/factories/Poll__factory";
 import { MACI__factory } from "../../typechain/factories/MACI__factory";
-import { checkEnvFile } from "../../ts/utils";
+import { checkDeployment, checkEnvFile } from "../../ts/utils";
 
 const stateIndex = 1;
 const pollId = 0;
@@ -31,6 +31,7 @@ async function main() {
   const addresses = JSON.parse(
     fs.readFileSync(deploymentPath).toString()
   ) as Addresses;
+  checkDeployment(addresses);
 
   const linkedLibraryAddresses = {
     ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT5"]:

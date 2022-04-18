@@ -8,8 +8,9 @@ import {
   AccQueueQuinaryMaci__factory,
 } from "../../typechain/";
 import { mergeMaciState, mergeMessage } from "../../ts/merge";
+import { checkDeployment } from "../../ts/utils";
 
-const pollId = 1;
+const pollId = 0;
 
 const deploymentFileName = `deployment-${hre.network.name}.json`;
 const deploymentPath = path.join(
@@ -24,6 +25,7 @@ async function main() {
   const addresses = JSON.parse(
     fs.readFileSync(deploymentPath).toString()
   ) as Addresses;
+  checkDeployment(addresses);
 
   const linkedLibraryAddresses = {
     ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT5"]:
