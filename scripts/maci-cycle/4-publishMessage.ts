@@ -8,7 +8,7 @@ import { MACI__factory } from "../../typechain/factories/MACI__factory";
 import { checkEnvFile } from "../../ts/utils";
 
 const stateIndex = 1;
-const pollId = 1;
+const pollId = 0;
 const voteWeight = 3;
 const voteOptionIndex = 1;
 

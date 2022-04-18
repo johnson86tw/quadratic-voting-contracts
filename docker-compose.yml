@@ -9,3 +9,4 @@ services:
     volumes:
       - ./zkeys:/root/maci/cli/zkeys
       - ./proofs:/root/maci/cli/proofs
+      - ./maci-cli-defaults/defaults.js:/root/maci/cli/build/defaults.js

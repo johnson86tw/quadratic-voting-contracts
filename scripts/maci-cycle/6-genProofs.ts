@@ -27,7 +27,7 @@ async function main() {
 
   let volume = `${defaultsPath}/localhost/defaults.js:/root/maci/cli/build/defaults.js`;
   if (hre.network.name !== "localhost") {
-    // TODO: should check file exist
+    // TODO: should check if the file exists
     volume = `${defaultsPath}/defaults.js:/root/maci/cli/build/defaults.js`;
   }
 

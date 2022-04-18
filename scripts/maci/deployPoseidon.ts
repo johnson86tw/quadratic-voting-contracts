@@ -50,7 +50,6 @@ async function main() {
     vkRegistry: "",
     pollFactory: "",
     messageAqFactory: "",
-    stateAq: "",
     maci: "",
     ppt: "",
   };

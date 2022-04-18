@@ -41,7 +41,7 @@ async function main() {
     { ...linkedLibraryAddresses },
     deployer
   ).deploy(addresses.pollFactory, addresses.qv, addresses.qv);
-
+  await maci.deployed();
   console.log(`Successfully deployed MACI at ${maci.address}`);
 
   addresses.maci = maci.address;

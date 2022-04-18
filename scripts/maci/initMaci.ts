@@ -50,31 +50,24 @@ async function main() {
 
   // transfer ownership
   console.log("Transferring ownership...");
-  try {
-    if ((await pollFactory.owner()) !== maci.address) {
-      await pollFactory.transferOwnership(maci.address);
-    } else if ((await messageAqFactory.owner()) !== pollFactory.address) {
-      await messageAqFactory.transferOwnership(pollFactory.address);
-    } else {
-      console.log("Skip ownership transferring");
-    }
-  } catch (e) {
-    throw new Error(
-      "Failed to transferOwnership of pollFactory and messageAqFactory"
-    );
+
+  const pollFactoryOwner = await pollFactory.owner();
+  const messageAqFactoryOwner = await messageAqFactory.owner();
+
+  if (pollFactoryOwner !== maci.address) {
+    const tx = await pollFactory.transferOwnership(maci.address);
+    await tx.wait();
+  } else if (messageAqFactoryOwner !== pollFactory.address) {
+    const tx = await messageAqFactory.transferOwnership(pollFactory.address);
+    await tx.wait();
+  } else {
+    console.log("Skip ownership transferring");
   }
 
   // init maci
   console.log("Initializing MACI...");
-  try {
-    const tx = await maci.init(
-      addresses.vkRegistry,
-      addresses.messageAqFactory
-    );
-    await tx.wait();
-  } catch (e) {
-    throw new Error(`Failed to initiailze maci, ${e}`);
-  }
+  const tx = await maci.init(addresses.vkRegistry, addresses.messageAqFactory);
+  await tx.wait();
 
   if (await maci.isInitialised()) {
     console.log("Successfully initialized maci");

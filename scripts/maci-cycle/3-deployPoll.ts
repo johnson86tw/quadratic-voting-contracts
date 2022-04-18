@@ -6,7 +6,7 @@ import { Addresses } from "../../ts/interfaces";
 import { MACI__factory } from "../../typechain/factories/MACI__factory";
 import { checkEnvFile } from "../../ts/utils";
 
-const duration = 600;
+const duration = 300;
 
 // .env
 const coordinatorPubKey = process.env.COORDINATOR_PUB_KEY as string;
