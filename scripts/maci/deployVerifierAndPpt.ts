@@ -22,14 +22,14 @@ async function main() {
   console.log("Deploying verifier...");
   const verifier = await new Verifier__factory(deployer).deploy();
   await verifier.deployed();
-  console.log("Successfully deploy verifer at", verifier.address);
+  console.log("Successfully deployed verifer at", verifier.address);
 
   console.log("Deploying pollProcessorAndTallyer...");
   const ppt = await new PollProcessorAndTallyer__factory(deployer).deploy(
     verifier.address
   );
   await ppt.deployed();
-  console.log("Successfully deploy ppt at", ppt.address);
+  console.log("Successfully deployed ppt at", ppt.address);
 
   addresses.ppt = ppt.address;
   fs.writeFileSync(deploymentPath, JSON.stringify(addresses));

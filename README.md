@@ -1,6 +1,6 @@
 # Quadratic Voting Contracts
 
-This project is about Ethereum smart contracts for running quadratic voting. It can also be used as a starter to build more complicated QV applications with [minimal anti-collusion infrastructure (MACI)](https://appliedzkp.github.io/maci/). 
+This project is about Ethereum smart contracts for running quadratic voting (QV). It can also be used as a starter to build more complicated QV applications with [minimal anti-collusion infrastructure (MACI)](https://appliedzkp.github.io/maci/). 
 
 ## Getting started
 
@@ -12,7 +12,8 @@ This project is about Ethereum smart contracts for running quadratic voting. It 
 ### Run scripts
 - Run `yarn start` to start localhost network.
 - Run `yarn hardhat run scripts/maci-cycle/0-deploy.ts --network localhost` to deploy contracts.
-- Run `./test/runScripts0-8.sh` to run through the cycle of maci. (Note that you should have [maci docker image](https://hub.docker.com/r/chnejohnson/maci-v1) and the generated zkeys and witnesses.)
+- Run `yarn hardhat run scripts/maci-cycle/6-genProofs.ts --network localhost` to generate proofs with docker-compose. (Note that you should have this [maci docker image](https://hub.docker.com/r/chnejohnson/maci-v1) and the generated zkeys and witnesses.)
+- Run `./test/runScripts0-8.sh` to run through the cycle of maci. 
 
 ## How to design a QV application?
 
@@ -25,9 +26,9 @@ The cost to the voter, which is the the payment for votes, may be through either
 1. What's a unit of voice credit, how to distribute voice credits to the voters, and whether voters can retain voice credits for future votes?
 2. What kinds of functions do you want to execute according to the voting result?
 
-### Application: Quadratic Hackathon
+### Application: Quadratic Hackathon [WIP]
 
-The prize pool will be split among winners "pro-rata" to the number of votes they received.
+The prize pool will be split among winners pro-rata to the number of votes they received.
 
 #### Inspirations
 - [Quadratic Voting and Funding at ETH Hackathon Beijing](https://ethresear.ch/t/quadratic-voting-and-funding-at-eth-hackathon-beijing/8910)

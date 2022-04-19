@@ -2,21 +2,19 @@ import hre, { ethers } from "hardhat";
 import path from "path";
 import fs from "fs";
 import { Addresses } from "../../ts/interfaces";
-
-import { PoseidonT3__factory } from "../../typechain/factories/PoseidonT3__factory";
-import { PoseidonT4__factory } from "../../typechain/factories/PoseidonT4__factory";
-import { PoseidonT5__factory } from "../../typechain/factories/PoseidonT5__factory";
-import { PoseidonT6__factory } from "../../typechain/factories/PoseidonT6__factory";
-
-import { VkRegistry__factory } from "../../typechain/factories/VkRegistry__factory";
-import { PollFactory__factory } from "../../typechain/factories/PollFactory__factory";
-import { MessageAqFactory__factory } from "../../typechain/factories/MessageAqFactory__factory";
-import { QuadraticVoting__factory } from "../../typechain/factories/QuadraticVoting__factory";
-import { MACI__factory } from "../../typechain/factories/MACI__factory";
-import { AccQueueQuinaryMaci__factory } from "../../typechain/factories/AccQueueQuinaryMaci__factory";
-
-import { PollProcessorAndTallyer__factory } from "../../typechain/factories/PollProcessorAndTallyer__factory";
-import { Verifier__factory } from "../../typechain/factories/Verifier__factory";
+import {
+  PoseidonT3__factory,
+  PoseidonT4__factory,
+  PoseidonT5__factory,
+  PoseidonT6__factory,
+  VkRegistry__factory,
+  PollFactory__factory,
+  MessageAqFactory__factory,
+  QuadraticVoting__factory,
+  MACI__factory,
+  PollProcessorAndTallyer__factory,
+  Verifier__factory,
+} from "../../typechain";
 
 const deploymentFileName = `deployment-${hre.network.name}.json`;
 const deploymentPath = path.join(
@@ -28,10 +26,29 @@ const deploymentPath = path.join(
 async function main() {
   const [deployer] = await ethers.getSigners();
 
+  console.log("Deploying PoseidonT3...");
   const poseidonT3 = await new PoseidonT3__factory(deployer).deploy();
+
+  console.log("Deploying PoseidonT4...");
   const poseidonT4 = await new PoseidonT4__factory(deployer).deploy();
+
+  console.log("Deploying PoseidonT5...");
   const poseidonT5 = await new PoseidonT5__factory(deployer).deploy();
+
+  console.log("Deploying PoseidonT6...");
   const poseidonT6 = await new PoseidonT6__factory(deployer).deploy();
+
+  await poseidonT3.deployed();
+  console.log(`PoseidonT3 deployed at ${poseidonT3.address}`);
+
+  await poseidonT4.deployed();
+  console.log(`PoseidonT4 deployed at ${poseidonT4.address}`);
+
+  await poseidonT5.deployed();
+  console.log(`PoseidonT5 deployed at ${poseidonT5.address}`);
+
+  await poseidonT6.deployed();
+  console.log(`PoseidonT6 deployed at ${poseidonT6.address}`);
 
   const linkedLibraryAddresses = {
     ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT5"]:
@@ -44,24 +61,47 @@ async function main() {
       poseidonT4.address,
   };
 
+  // vkRegistry
+  console.log("Deploying vkRegistry...");
   const vkRegistry = await new VkRegistry__factory(deployer).deploy();
+  await vkRegistry.deployed();
+  console.log(`Successfully deployed vkRegistry at ${vkRegistry.address}`);
 
+  // pollFactory
+  console.log("Deploying pollFactory...");
   const pollFactory = await new PollFactory__factory(
     { ...linkedLibraryAddresses },
     deployer
   ).deploy();
 
+  await pollFactory.deployed();
+  console.log(`Successfully deployed pollFactory at ${pollFactory.address}`);
+
+  // messageAqFactory
+  console.log("Deploying messageAqFactory...");
   const messageAqFactory = await new MessageAqFactory__factory(
     { ...linkedLibraryAddresses },
     deployer
   ).deploy();
+  await messageAqFactory.deployed();
+  console.log(
+    `Successfully deployed messageAqFactory at ${messageAqFactory.address}`
+  );
 
+  // QuadraticVoting
+  console.log("Deploying QuadraticVoting...");
   const qv = await new QuadraticVoting__factory(deployer).deploy();
+  await qv.deployed();
+  console.log(`Successfully deployed QuadraticVoting at ${qv.address}`);
 
+  // MACI
+  console.log("Deploying MACI...");
   const maci = await new MACI__factory(
     { ...linkedLibraryAddresses },
     deployer
   ).deploy(pollFactory.address, qv.address, qv.address);
+  await maci.deployed();
+  console.log(`Successfully deployed MACI at ${maci.address}`);
 
   // transfer ownership
   await pollFactory.transferOwnership(maci.address);
@@ -77,10 +117,17 @@ async function main() {
   }
 
   // deploy verifier and pollProcessorAndTallyer
+  console.log("Deploying verifier...");
   const verifier = await new Verifier__factory(deployer).deploy();
-  const pollProcessorAndTallyer = await new PollProcessorAndTallyer__factory(
-    deployer
-  ).deploy(verifier.address);
+  await verifier.deployed();
+  console.log("Successfully deployed verifer at", verifier.address);
+
+  console.log("Deploying pollProcessorAndTallyer...");
+  const ppt = await new PollProcessorAndTallyer__factory(deployer).deploy(
+    verifier.address
+  );
+  await ppt.deployed();
+  console.log("Successfully deployed ppt at", ppt.address);
 
   const addresses: Addresses = {
     poseidonT5: poseidonT5.address,
@@ -90,8 +137,9 @@ async function main() {
     vkRegistry: vkRegistry.address,
     pollFactory: pollFactory.address,
     messageAqFactory: messageAqFactory.address,
+    qv: qv.address,
     maci: maci.address,
-    ppt: pollProcessorAndTallyer.address,
+    ppt: ppt.address,
   };
 
   fs.writeFileSync(deploymentPath, JSON.stringify(addresses));
