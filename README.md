@@ -17,14 +17,18 @@ This project is about Ethereum smart contracts for running quadratic voting (QV)
 
 ## How to design a QV application?
 
-Quadratic voting is a tool to elicit reliable individual preferences over a given set of alternatives. The idea is to associate a cost with a vote. Voters buy as many votes as they wish by paying the square of the votes they buy using some currency which is called “voice credit”. Each voter pays some voice credits for her votes, and a vote pricing rule is a quadratic function:
+Quadratic voting is a way of making collective decisions, also a tool to elicit individual preferences over a given set of alternatives. 
+
+The idea is to associate a cost with a vote. Voters buy as many votes as they wish by paying the square of the votes they buy using some currency which is called “voice credit”. Each voter pays some voice credits for her votes, and a vote pricing rule is a quadratic function:
 
 Cost to the voter = (Number of votes)^2
 
-The cost to the voter, which is the the payment for votes, may be through either artificial currencies or real money. So our degree of freedom is the design of the voice credit and the way of applying the voting result. There are two main considerations in designing a QV application:
+The cost to the voter, which is the the payment for votes, may be through either an artificial currency or real money. So our degree of freedom is the design of the voice credit and the way of applying the voting results. 
+
+There are two main considerations in designing a QV app:
 
 1. What's a unit of voice credit, how to distribute voice credits to the voters, and whether voters can retain voice credits for future votes?
-2. What kinds of functions do you want to execute according to the voting result?
+2. What functions do you want to execute according to the voting results?
 
 ### Application: Quadratic Hackathon [WIP]
 
