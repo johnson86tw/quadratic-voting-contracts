@@ -47,11 +47,12 @@ contract TradableVoiceCredit is InitialVoiceCreditProxy, SignUpGatekeeper {
 
     /*
      * Tradable voice credits
-     * BUG: Because user’s voice credit balance is reset
-     * to this number for every new poll. If we want to bind ERC20
-     * token to voice credit, we can only use poll id 0 and should deploy
-     * the another maci contract for the next poll. Otherwise, voter can get
-     * voice credit in poll id 1 as the number in the last poll but without any payment.
+     * BUG: In this case,  because user’s voice credit balance is reset
+     * to the number of voiceCreditBalance for every new poll.
+     * If we want to bind an ERC20 token to voice credit,
+     * we can only use poll id 0 and should deploy another maci contract
+     * for the next poll. Otherwise, voters can get voice credit in poll id 1
+     * as the number in the last poll but without any payment.
      */
     function getVoiceCredits(address _voter, bytes memory)
         public

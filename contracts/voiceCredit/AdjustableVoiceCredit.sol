@@ -7,14 +7,14 @@ import {MACI} from "maci-contracts/contracts/MACI.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
 /*
- * Idea: Let owner set voice credit balance before each round of poll.
+ * Idea: Let owner set voice credit voiceCreditBalance before each round of poll.
  */
 contract AdjustableVoiceCredit is
     Ownable,
     InitialVoiceCreditProxy,
     SignUpGatekeeper
 {
-    uint256 public budget = 100;
+    uint256 public voiceCreditBalance = 100;
 
     function setMaciInstance(MACI _maci) public override {}
 
@@ -29,14 +29,29 @@ contract AdjustableVoiceCredit is
         override
         returns (uint256)
     {
-        return budget;
+        return voiceCreditBalance;
     }
 
     /*
-     * BUG: How to restrict owner to adjusting budget in the voting period?
+     * Adjustable voice credits
+     * BUG: In this case, because user’s voice credit balance is reset
+     * to the number of voiceCreditBalance for every new poll.
+     * If the owner want to change voice credit balance, the owner
+     * should deploy another maci contract for the next poll. Otherwise,
+     * voters can get voice credit in poll id 1 as the number in the last poll.
      */
-    function setBudget(uint256 _budget) public onlyOwner {
-        // TODO: only before deploying poll
-        budget = _budget;
+    function setVoiceCreditBalance(uint256 _voiceCreditBalance, MACI _maci)
+        public
+        onlyOwner
+    {
+        require(
+            address(_maci.initialVoiceCreditProxy()) == address(this),
+            "AdjustableVoiceCredit: Incorrect MACI contract"
+        );
+        require(
+            _maci.isInitialised() == false,
+            "AdjustableVoiceCredit: Initailzed MACI cannot change voiceCreditBalance"
+        );
+        voiceCreditBalance = _voiceCreditBalance;
     }
 }
