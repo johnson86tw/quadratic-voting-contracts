@@ -1,8 +1,8 @@
 import hre, { ethers } from "hardhat";
 import path from "path";
 import fs from "fs";
-import { PollProcessorAndTallyer__factory } from "../../typechain/factories/PollProcessorAndTallyer__factory";
-import { Verifier__factory } from "../../typechain/factories/Verifier__factory";
+import { PollProcessorAndTallyer__factory } from "../../build/typechain/factories/PollProcessorAndTallyer__factory";
+import { Verifier__factory } from "../../build/typechain/factories/Verifier__factory";
 import { Addresses } from "../../ts/interfaces";
 
 const deploymentFileName = `deployment-${hre.network.name}.json`;

@@ -10,7 +10,7 @@ import {
   Poll__factory,
   Verifier__factory,
   VkRegistry__factory,
-} from "../../typechain";
+} from "../../build/typechain";
 import { checkDeployment } from "../../ts/utils";
 
 const pollId = 0;

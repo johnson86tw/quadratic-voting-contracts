@@ -3,7 +3,7 @@ import path from "path";
 import fs from "fs";
 import tmp from "tmp";
 import shelljs from "shelljs";
-import { VkRegistry } from "../typechain";
+import { VkRegistry } from "../build/typechain";
 
 interface TreeDepths {
   stateTreeDepth: string | number;

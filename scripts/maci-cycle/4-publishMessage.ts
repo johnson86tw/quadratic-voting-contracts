@@ -3,8 +3,8 @@ import fs from "fs";
 import path from "path";
 import { Command, Keypair, PrivKey, PubKey } from "maci-domainobjs";
 import { Addresses } from "../../ts/interfaces";
-import { Poll__factory } from "../../typechain/factories/Poll__factory";
-import { MACI__factory } from "../../typechain/factories/MACI__factory";
+import { Poll__factory } from "../../build/typechain/factories/Poll__factory";
+import { MACI__factory } from "../../build/typechain/factories/MACI__factory";
 import { checkDeployment, checkEnvFile } from "../../ts/utils";
 
 const stateIndex = 1;

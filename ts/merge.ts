@@ -1,5 +1,5 @@
 import { providers, Signer } from "ethers";
-import { MACI, Poll, AccQueueQuinaryMaci } from "../typechain/";
+import { MACI, Poll, AccQueueQuinaryMaci } from "../build/typechain/";
 
 const mergeMaciState = async (
   provider: providers.Provider,

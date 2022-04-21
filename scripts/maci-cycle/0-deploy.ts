@@ -14,7 +14,7 @@ import {
   MACI__factory,
   PollProcessorAndTallyer__factory,
   Verifier__factory,
-} from "../../typechain";
+} from "../../build/typechain";
 
 const deploymentFileName = `deployment-${hre.network.name}.json`;
 const deploymentPath = path.join(

@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import { PubKey } from "maci-domainobjs";
 import { Addresses } from "../../ts/interfaces";
-import { MACI__factory } from "../../typechain/factories/MACI__factory";
+import { MACI__factory } from "../../build/typechain/factories/MACI__factory";
 import { checkDeployment, checkEnvFile } from "../../ts/utils";
 
 const duration = 300;

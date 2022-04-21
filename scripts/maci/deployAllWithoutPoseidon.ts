@@ -8,7 +8,7 @@ import {
   PollFactory__factory,
   QuadraticVoting__factory,
   VkRegistry__factory,
-} from "../../typechain";
+} from "../../build/typechain";
 
 const deploymentFileName = `deployment-${hre.network.name}.json`;
 const deploymentPath = path.join(

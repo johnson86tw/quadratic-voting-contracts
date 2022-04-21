@@ -2,7 +2,7 @@ import hre, { ethers } from "hardhat";
 import path from "path";
 import fs from "fs";
 import { Addresses } from "../../ts/interfaces";
-import { MACI__factory } from "../../typechain";
+import { MACI__factory } from "../../build/typechain";
 import { checkDeployment } from "../../ts/utils";
 
 const deploymentFileName = `deployment-${hre.network.name}.json`;

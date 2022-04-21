@@ -3,10 +3,10 @@ import path from "path";
 import fs from "fs";
 import { Addresses } from "../../ts/interfaces";
 
-import { PoseidonT3__factory } from "../../typechain/factories/PoseidonT3__factory";
-import { PoseidonT4__factory } from "../../typechain/factories/PoseidonT4__factory";
-import { PoseidonT5__factory } from "../../typechain/factories/PoseidonT5__factory";
-import { PoseidonT6__factory } from "../../typechain/factories/PoseidonT6__factory";
+import { PoseidonT3__factory } from "../../build/typechain/factories/PoseidonT3__factory";
+import { PoseidonT4__factory } from "../../build/typechain/factories/PoseidonT4__factory";
+import { PoseidonT5__factory } from "../../build/typechain/factories/PoseidonT5__factory";
+import { PoseidonT6__factory } from "../../build/typechain/factories/PoseidonT6__factory";
 
 const deploymentFileName = `deployment-${hre.network.name}.json`;
 const deploymentPath = path.join(

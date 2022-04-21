@@ -6,7 +6,7 @@ import {
   MACI__factory,
   Poll__factory,
   AccQueueQuinaryMaci__factory,
-} from "../../typechain/";
+} from "../../build/typechain/";
 import { mergeMaciState, mergeMessage } from "../../ts/merge";
 import { checkDeployment } from "../../ts/utils";
 

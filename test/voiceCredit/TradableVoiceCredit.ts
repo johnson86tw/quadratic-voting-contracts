@@ -5,7 +5,7 @@ import {
   MockToken__factory,
   TradableVoiceCredit,
   TradableVoiceCredit__factory,
-} from "../typechain";
+} from "../../build/typechain";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 let deployer: SignerWithAddress;

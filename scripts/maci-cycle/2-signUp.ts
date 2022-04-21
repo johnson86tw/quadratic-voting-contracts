@@ -3,7 +3,7 @@ import path from "path";
 import fs from "fs";
 import { Addresses } from "../../ts/interfaces";
 import { Keypair, PrivKey } from "maci-domainobjs";
-import { MACI__factory } from "../../typechain/factories/MACI__factory";
+import { MACI__factory } from "../../build/typechain/factories/MACI__factory";
 import { checkDeployment, checkEnvFile } from "../../ts/utils";
 
 const userPrivKey = process.env.USER_PRIV_KEY as string;

@@ -2,8 +2,8 @@ import hre, { ethers } from "hardhat";
 import path from "path";
 import fs from "fs";
 import { Addresses } from "../../ts/interfaces";
-import { MACI__factory } from "../../typechain/factories/MACI__factory";
-import { AccQueueQuinaryMaci__factory } from "../../typechain";
+import { MACI__factory } from "../../build/typechain/factories/MACI__factory";
+import { AccQueueQuinaryMaci__factory } from "../../build/typechain";
 
 const deploymentFileName = `deployment-${hre.network.name}.json`;
 const deploymentPath = path.join(

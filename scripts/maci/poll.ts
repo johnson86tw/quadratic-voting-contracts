@@ -8,7 +8,7 @@ import {
   MACI__factory,
   Poll__factory,
   AccQueueQuinaryMaci__factory,
-} from "../../typechain";
+} from "../../build/typechain";
 
 const pollId = 0;
 

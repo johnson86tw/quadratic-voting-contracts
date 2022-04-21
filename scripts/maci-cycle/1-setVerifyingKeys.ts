@@ -5,7 +5,7 @@ import setVerifyingKeys from "../../ts/setVerifyingKeys";
 import { Addresses } from "../../ts/interfaces";
 import { checkDeployment, checkEnvFile } from "../../ts/utils";
 
-import { VkRegistry__factory } from "../../typechain/factories/VkRegistry__factory";
+import { VkRegistry__factory } from "../../build/typechain/factories/VkRegistry__factory";
 
 const deploymentFileName = `deployment-${hre.network.name}.json`;
 const deploymentPath = path.join(

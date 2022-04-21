@@ -3,9 +3,9 @@ import fs from "fs";
 import path from "path";
 import { Addresses, TallyResult } from "../../ts/interfaces";
 import { verifyTallyResult } from "../../ts/maci";
-import { MACI__factory } from "../../typechain/factories/MACI__factory";
-import { PollProcessorAndTallyer__factory } from "../../typechain/factories/PollProcessorAndTallyer__factory";
-import { Poll__factory } from "../../typechain";
+import { MACI__factory } from "../../build/typechain/factories/MACI__factory";
+import { PollProcessorAndTallyer__factory } from "../../build/typechain/factories/PollProcessorAndTallyer__factory";
+import { Poll__factory } from "../../build/typechain";
 import { checkDeployment } from "../../ts/utils";
 
 const pollId = 0;

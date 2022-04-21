@@ -5,7 +5,7 @@ import {
   hash3,
   hash5,
 } from "maci-crypto";
-import { Poll, PollProcessorAndTallyer } from "../typechain";
+import { Poll, PollProcessorAndTallyer } from "../build/typechain";
 import { TallyResult } from "./interfaces";
 
 const genTallyResultCommitment = (

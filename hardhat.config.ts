@@ -13,6 +13,9 @@ const GAS_LIMIT = 30000000;
 
 // https://hardhat.org/config/
 const config: HardhatUserConfig = {
+  paths: {
+    artifacts: "build/contracts",
+  },
   solidity: {
     version: "0.7.2",
     settings: {
@@ -24,9 +27,6 @@ const config: HardhatUserConfig = {
       },
     },
   },
-  // paths: {
-  //   artifacts: "build/contracts",
-  // },
   networks: {
     hardhat: {
       allowUnlimitedContractSize: true, // for deploying maci
@@ -57,7 +57,7 @@ const config: HardhatUserConfig = {
     apiKey: process.env.ETHERSCAN_API_KEY,
   },
   typechain: {
-    outDir: "typechain/",
+    outDir: "build/typechain/",
     target: "ethers-v5",
     alwaysGenerateOverloads: false,
     externalArtifacts: ["precompiled/*.json"],

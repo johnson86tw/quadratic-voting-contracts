@@ -8,7 +8,7 @@ import {
   PollProcessorAndTallyer,
   Verifier,
   VkRegistry,
-} from "../typechain";
+} from "../build/typechain";
 
 const proveOnChain = async (
   proofDirPath: string,

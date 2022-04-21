@@ -2,7 +2,7 @@ import hre, { ethers } from "hardhat";
 import path from "path";
 import fs from "fs";
 import { Addresses } from "../../ts/interfaces";
-import { MessageAqFactory__factory } from "../../typechain";
+import { MessageAqFactory__factory } from "../../build/typechain";
 
 const deploymentFileName = `deployment-${hre.network.name}.json`;
 const deploymentPath = path.join(

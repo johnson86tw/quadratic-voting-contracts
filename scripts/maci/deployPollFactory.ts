@@ -2,7 +2,7 @@ import hre, { ethers } from "hardhat";
 import path from "path";
 import fs from "fs";
 import { Addresses } from "../../ts/interfaces";
-import { PollFactory__factory } from "../../typechain/factories/PollFactory__factory";
+import { PollFactory__factory } from "../../build/typechain/factories/PollFactory__factory";
 
 const deploymentFileName = `deployment-${hre.network.name}.json`;
 const deploymentPath = path.join(

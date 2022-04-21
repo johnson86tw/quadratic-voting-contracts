@@ -7,7 +7,6 @@ const checkEnvFile = (...args: string[]) => {
 
     USER_PRIV_KEY: process.env.USER_PRIV_KEY,
 
-    MAX_USERS: process.env.MAX_USERS,
     MAX_MESSAGES: process.env.MAX_MESSAGES,
     MAX_VOTE_OPTIONS: process.env.MAX_VOTE_OPTIONS,
 
@@ -16,10 +15,6 @@ const checkEnvFile = (...args: string[]) => {
     MESSAGE_TREE_DEPTH: process.env.MESSAGE_TREE_DEPTH,
     MESSAGE_TREE_SUB_DEPTH: process.env.MESSAGE_TREE_SUB_DEPTH,
     VOTE_OPTION_TREE_DEPTH: process.env.VOTE_OPTION_TREE_DEPTH,
-
-    VK_REGISTRY: process.env.VK_REGISTRY,
-    MACI: process.env.MACI,
-    POLL_ID: process.env.POLL_ID,
   };
 
   if (args.length > 0) {

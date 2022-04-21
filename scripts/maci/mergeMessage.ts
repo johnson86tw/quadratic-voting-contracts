@@ -2,9 +2,9 @@ import hre, { ethers } from "hardhat";
 import fs from "fs";
 import path from "path";
 import { Addresses } from "../../ts/interfaces";
-import { Poll__factory } from "../../typechain/factories/Poll__factory";
-import { MACI__factory } from "../../typechain/factories/MACI__factory";
-import { AccQueueQuinaryMaci__factory } from "../../typechain";
+import { Poll__factory } from "../../build/typechain/factories/Poll__factory";
+import { MACI__factory } from "../../build/typechain/factories/MACI__factory";
+import { AccQueueQuinaryMaci__factory } from "../../build/typechain";
 import { mergeMessage } from "../../ts/merge";
 
 const pollId = 1;

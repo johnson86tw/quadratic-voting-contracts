@@ -14,48 +14,48 @@ import { MaciState } from "maci-core";
 
 // TODO: check conflix with https://github.com/quadratic-funding/qfi/blob/main/packages/contracts/tests/QV/06-verify.ts
 
-import { PoseidonT3__factory } from "../typechain/factories/PoseidonT3__factory";
-import { PoseidonT3 } from "../typechain/PoseidonT3";
-import { PoseidonT4__factory } from "../typechain/factories/PoseidonT4__factory";
-import { PoseidonT4 } from "../typechain/PoseidonT4";
-import { PoseidonT5__factory } from "../typechain/factories/PoseidonT5__factory";
-import { PoseidonT5 } from "../typechain/PoseidonT5";
-import { PoseidonT6__factory } from "../typechain/factories/PoseidonT6__factory";
-import { PoseidonT6 } from "../typechain/PoseidonT6";
+import { PoseidonT3__factory } from "../build/typechain/factories/PoseidonT3__factory";
+import { PoseidonT3 } from "../build/typechain/PoseidonT3";
+import { PoseidonT4__factory } from "../build/typechain/factories/PoseidonT4__factory";
+import { PoseidonT4 } from "../build/typechain/PoseidonT4";
+import { PoseidonT5__factory } from "../build/typechain/factories/PoseidonT5__factory";
+import { PoseidonT5 } from "../build/typechain/PoseidonT5";
+import { PoseidonT6__factory } from "../build/typechain/factories/PoseidonT6__factory";
+import { PoseidonT6 } from "../build/typechain/PoseidonT6";
 
-import { VkRegistry__factory } from "../typechain/factories/VkRegistry__factory";
-import { VkRegistry } from "../typechain/VkRegistry";
+import { VkRegistry__factory } from "../build/typechain/factories/VkRegistry__factory";
+import { VkRegistry } from "../build/typechain/VkRegistry";
 
 import {
   PollFactory__factory,
   PollFactoryLibraryAddresses,
-} from "../typechain/factories/PollFactory__factory";
-import { PollFactory } from "../typechain/PollFactory";
+} from "../build/typechain/factories/PollFactory__factory";
+import { PollFactory } from "../build/typechain/PollFactory";
 
-import { Poll__factory } from "../typechain/factories/Poll__factory";
-import { Poll } from "../typechain/Poll";
+import { Poll__factory } from "../build/typechain/factories/Poll__factory";
+import { Poll } from "../build/typechain/Poll";
 
 import {
   MessageAqFactory__factory,
   MessageAqFactoryLibraryAddresses,
-} from "../typechain/factories/MessageAqFactory__factory";
-import { MessageAqFactory } from "../typechain/MessageAqFactory";
-import { AccQueueQuinaryMaci__factory } from "../typechain";
-import { AccQueueQuinaryMaci } from "../typechain/AccQueueQuinaryMaci";
+} from "../build/typechain/factories/MessageAqFactory__factory";
+import { MessageAqFactory } from "../build/typechain/MessageAqFactory";
+import { AccQueueQuinaryMaci__factory } from "../build/typechain";
+import { AccQueueQuinaryMaci } from "../build/typechain/AccQueueQuinaryMaci";
 
-import { PollProcessorAndTallyer__factory } from "../typechain/factories/PollProcessorAndTallyer__factory";
-import { PollProcessorAndTallyer } from "../typechain/PollProcessorAndTallyer";
-import { MockVerifier } from "../typechain/MockVerifier";
-import { MockVerifier__factory } from "../typechain/factories/MockVerifier__factory";
+import { PollProcessorAndTallyer__factory } from "../build/typechain/factories/PollProcessorAndTallyer__factory";
+import { PollProcessorAndTallyer } from "../build/typechain/PollProcessorAndTallyer";
+import { MockVerifier } from "../build/typechain/MockVerifier";
+import { MockVerifier__factory } from "../build/typechain/factories/MockVerifier__factory";
 
 import {
   MACI__factory,
   MACILibraryAddresses,
-} from "../typechain/factories/MACI__factory";
-import { MACI } from "../typechain/MACI";
+} from "../build/typechain/factories/MACI__factory";
+import { MACI } from "../build/typechain/MACI";
 
-import { QuadraticVoting__factory } from "../typechain/factories/QuadraticVoting__factory";
-import { QuadraticVoting } from "../typechain/QuadraticVoting";
+import { QuadraticVoting__factory } from "../build/typechain/factories/QuadraticVoting__factory";
+import { QuadraticVoting } from "../build/typechain/QuadraticVoting";
 
 let deployer: Signer;
 let deployerAddress: string;
