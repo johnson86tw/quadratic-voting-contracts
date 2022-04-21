@@ -1,18 +1,17 @@
 {
   "name": "qv-contracts",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Quadratic Voting contracts",
   "license": "GPL-3.0-or-later",
   "homepage": "https://github.com/chnejohnson/quadratic-voting-contracts",
   "main": "index.js",
   "files": [
-    "build",
-    "typechain"
+    "build"
   ],
   "scripts": {
     "start": "hardhat node",
     "build": "hardhat compile && hardhat typechain",
-    "clean": "shx rm -rf ./build ./cache ./coverage ./typechain ./coverage.json ./abi",
+    "clean": "shx rm -rf ./build ./cache ./coverage ./coverage.json",
     "coverage": "yarn typechain && hardhat coverage --solcoverjs ./.solcover.js --temp build/contracts --testfiles \"./tests/**/*.ts\"",
     "test": "hardhat test",
     "typechain": "hardhat typechain",
