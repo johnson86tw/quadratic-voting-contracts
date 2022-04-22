@@ -64,6 +64,7 @@ async function main() {
   console.log("isAfterDeadline:", await poll.isAfterDeadline());
   console.log("messageAq.subTreesMerged:", await messageAq.subTreesMerged());
   console.log("messageAq.treeMerged:", await messageAq.treeMerged());
+  console.log("coordinatorPubKey", await poll.coordinatorPubKey());
 }
 
 main().catch((error) => {
