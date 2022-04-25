@@ -6,19 +6,22 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
 contract SimpleVoteOption is Ownable {
     MACI public maci;
-    uint256 public pollId;
 
-    event Option(uint256 indexed index, string content);
+    event Option(
+        uint256 indexed pollId,
+        uint256 indexed index,
+        string metadata
+    );
 
-    constructor(MACI _maci, uint256 _pollId) {
+    constructor(MACI _maci) {
         maci = _maci;
-        pollId = _pollId;
     }
 
-    function setOption(uint256 _optionIndex, string calldata _content)
-        public
-        onlyOwner
-    {
-        emit Option(_optionIndex, _content);
+    function setOption(
+        uint256 _pollId,
+        uint256 _optionIndex,
+        string calldata _metadata
+    ) public onlyOwner {
+        emit Option(_pollId, _optionIndex, _metadata);
     }
 }

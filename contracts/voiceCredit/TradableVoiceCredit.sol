@@ -16,7 +16,7 @@ contract TradableVoiceCredit is InitialVoiceCreditProxy, SignUpGatekeeper {
     // MACI allows 2 ** 32 voice credits max
     uint256 private constant MAX_VOICE_CREDITS = 10**9;
 
-    // the token which can be converted to voice credit
+    // the token which can be converted into the voice credit
     ERC20 public nativeToken;
 
     // for example, we can converted 1 ETH to 1 voice credit if voice credit factor is 10^18
@@ -45,8 +45,8 @@ contract TradableVoiceCredit is InitialVoiceCreditProxy, SignUpGatekeeper {
      */
     function register(address, bytes memory) public override {}
 
-    /*
-     * Tradable voice credits
+    /**
+     * @dev Tradable voice credits
      * BUG: In this case,  because user’s voice credit balance is reset
      * to the number of voiceCreditBalance for every new poll.
      * If we want to bind an ERC20 token to voice credit,

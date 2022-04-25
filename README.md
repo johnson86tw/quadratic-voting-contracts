@@ -1,6 +1,6 @@
 # Quadratic Voting Contracts
 
-This project is about the Ethereum smart contracts for running quadratic voting (QV). It can also be used as a starter to build more complicated QV applications with [minimal anti-collusion infrastructure (MACI)](https://appliedzkp.github.io/maci/). 
+This project is about Ethereum smart contracts for running quadratic voting (QV). It can also be used as a starter to build more complicated QV applications on the [minimal anti-collusion infrastructure (MACI)](https://appliedzkp.github.io/maci/). 
 
 ## Getting started
 
