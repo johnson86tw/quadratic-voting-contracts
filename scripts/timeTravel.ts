@@ -1,6 +1,6 @@
 import { ethers } from "hardhat";
 
-const duration = 10000;
+const duration = 18000;
 
 async function main() {
   const hardHatProvider = ethers.provider;

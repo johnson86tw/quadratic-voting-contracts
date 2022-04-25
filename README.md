@@ -11,8 +11,8 @@ This project is about Ethereum smart contracts for running quadratic voting (QV)
 
 ### Run scripts
 - Run `yarn start` to start localhost network.
-- Run `yarn hardhat run scripts/maci-cycle/0-deploy.ts --network localhost` to deploy contracts.
-- Run `yarn hardhat run scripts/maci-cycle/6-genProofs.ts --network localhost` to generate proofs with docker-compose. (Note that you should have this [maci docker image](https://hub.docker.com/r/chnejohnson/maci-v1) and the generated zkeys and witnesses.)
+- Run `yarn hardhat run scripts/maci/0-deploy.ts --network localhost` to deploy contracts.
+- Run `yarn hardhat run scripts/maci/6-genProofs.ts --network localhost` to generate proofs with docker-compose. (Note that you should have this [maci docker image](https://hub.docker.com/r/chnejohnson/maci-v1) and the generated zkeys and witnesses.)
 - Run `./test/runScripts0-8.sh` to run through the cycle of maci. 
 
 ## How to design a QV application?
