@@ -12,7 +12,11 @@ yarn hardhat run scripts/timeTravel.ts --network localhost
 
 yarn hardhat run scripts/maci/5-merge.ts --network localhost
 
-rm ./proofs/tally.json
+TallyFile=./proofs/tally.json
+if test -f "$TallyFile"; then
+    echo "Removing tally.json file"
+    rm ./proofs/tally.json
+fi
 
 yarn hardhat run scripts/maci/6-genProofs.ts --network localhost
 yarn hardhat run scripts/maci/7-proveOnChain.ts --network localhost

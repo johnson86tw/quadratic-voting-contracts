@@ -8,31 +8,39 @@ import { MACI__factory } from "../../build/typechain/factories/MACI__factory";
 import { checkDeployment, checkEnvFile } from "../../ts/utils";
 import vote from "../../ts/vote";
 
+/**
+ * This script is according to clr.fund pattern which is change key and vote again.
+ */
+
+const stateIndex = 1;
 const pollId = 0;
 
 // .env
 const userPrivKey = process.env.USER_PRIV_KEY as string;
 const userKeypair = new Keypair(PrivKey.unserialize(userPrivKey));
 
+// User's new key
+const newKey = new Keypair();
+
 const votes = [
   {
-    stateIndex: 1,
-    voteOptionIndex: 0,
-    newVoteWeight: 4,
+    stateIndex,
+    voteOptionIndex: 1,
+    newVoteWeight: 3,
     nonce: 1,
     pollId,
   },
   {
-    stateIndex: 1,
-    voteOptionIndex: 1,
-    newVoteWeight: 1,
+    stateIndex,
+    voteOptionIndex: 2,
+    newVoteWeight: 2,
     nonce: 2,
     pollId,
   },
   {
-    stateIndex: 1,
-    voteOptionIndex: 3,
-    newVoteWeight: 3,
+    stateIndex,
+    voteOptionIndex: 4,
+    newVoteWeight: 4,
     nonce: 3,
     pollId,
   },
@@ -77,8 +85,16 @@ async function main() {
   ).attach(pollAddress);
 
   for (let i = votes.length - 1; i >= 0; i--) {
-    await vote(poll, votes[i], userKeypair.pubKey, userKeypair.privKey);
+    // change key
+    if (i === 0) {
+      await vote(poll, votes[i], newKey.pubKey, userKeypair.privKey);
+    }
+    // vote with new key
+    await vote(poll, votes[i], newKey.pubKey, newKey.privKey);
   }
+
+  console.log("new PubKey", newKey.pubKey.serialize());
+  console.log("new PrivKey", newKey.privKey.serialize());
 }
 
 main().catch((error) => {

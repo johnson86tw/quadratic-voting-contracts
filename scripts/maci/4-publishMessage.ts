@@ -1,19 +1,29 @@
 import hre, { ethers } from "hardhat";
 import fs from "fs";
 import path from "path";
-import { Command, Keypair, PrivKey, PubKey } from "maci-domainobjs";
+import { Keypair, PrivKey } from "maci-domainobjs";
 import { Addresses } from "../../ts/interfaces";
 import { Poll__factory } from "../../build/typechain/factories/Poll__factory";
 import { MACI__factory } from "../../build/typechain/factories/MACI__factory";
 import { checkDeployment, checkEnvFile } from "../../ts/utils";
+import vote from "../../ts/vote";
 
 const stateIndex = 1;
 const pollId = 0;
-const voteWeight = 3;
-const voteOptionIndex = 1;
+
+const votes = [
+  {
+    stateIndex,
+    voteOptionIndex: 1,
+    newVoteWeight: 3,
+    nonce: 1,
+    pollId,
+  },
+];
 
 // .env
 const userPrivKey = process.env.USER_PRIV_KEY as string;
+const userKeypair = new Keypair(PrivKey.unserialize(userPrivKey));
 
 const deploymentFileName = `deployment-${hre.network.name}.json`;
 const deploymentPath = path.join(
@@ -25,8 +35,6 @@ const deploymentPath = path.join(
 async function main() {
   checkEnvFile("USER_PRIV_KEY", "COORDINATOR_PUB_KEY");
   const [deployer] = await ethers.getSigners();
-
-  const userKeypair = new Keypair(PrivKey.unserialize(userPrivKey));
 
   const addresses = JSON.parse(
     fs.readFileSync(deploymentPath).toString()
@@ -55,65 +63,10 @@ async function main() {
     deployer
   ).attach(pollAddress);
 
-  const maxValues = await poll.maxValues();
-  const maxVoteOptions = Number(maxValues.maxVoteOptions);
-
-  if (maxVoteOptions < voteOptionIndex) {
-    throw new Error("The vote option index is invalid");
+  // vote
+  for (let i = votes.length - 1; i >= 0; i--) {
+    await vote(poll, votes[i], userKeypair.pubKey, userKeypair.privKey);
   }
-
-  const coordinatorPubKeyResult = await poll.coordinatorPubKey();
-  const coordinatorPubKey = new PubKey([
-    BigInt(coordinatorPubKeyResult.x.toString()),
-    BigInt(coordinatorPubKeyResult.y.toString()),
-  ]);
-
-  const _stateIndex = BigInt(stateIndex);
-  const _newPubKey = userKeypair.pubKey;
-  const _voteOptionIndex = BigInt(voteOptionIndex);
-  const _newVoteWeight = BigInt(voteWeight);
-  const _nonce = BigInt(1);
-  const _pollId = BigInt(0);
-  const _salt = BigInt(1);
-  const command = new Command(
-    _stateIndex,
-    _newPubKey,
-    _voteOptionIndex,
-    _newVoteWeight,
-    _nonce,
-    _pollId,
-    _salt
-  );
-
-  const signature = command.sign(userKeypair.privKey);
-
-  const encKeypair = new Keypair();
-  const sharedKey = Keypair.genEcdhSharedKey(
-    encKeypair.privKey,
-    coordinatorPubKey
-  );
-
-  const message = command.encrypt(signature, sharedKey);
-
-  console.log("Start publishing message...");
-  const tx = await poll.publishMessage(
-    // @ts-ignore
-    message.asContractParam(),
-    encKeypair.pubKey.asContractParam(),
-    {
-      gasLimit: 1000000,
-    }
-  );
-
-  const { logs } = await tx.wait();
-  console.log("Transaction hash:", tx.hash);
-  console.log("Ephemeral private key:", encKeypair.privKey.serialize());
-
-  const iface = poll.interface;
-  const PublishMessageEvent = iface.parseLog(logs[logs.length - 1]);
-  // note: can use these to get user's voice credit balance?
-  const messageEventArg = PublishMessageEvent.args._message.toString();
-  const encPubKeyEventArg = PublishMessageEvent.args._encPubKey.toString();
 
   console.log("Successfully published message");
 }

@@ -1,12 +1,11 @@
 import hre, { ethers } from "hardhat";
 import fs from "fs";
 import path from "path";
-import { Keypair, PrivKey } from "maci-domainobjs";
+import { Command, Keypair, PrivKey, PubKey } from "maci-domainobjs";
 import { Addresses } from "../../ts/interfaces";
 import { Poll__factory } from "../../build/typechain/factories/Poll__factory";
 import { MACI__factory } from "../../build/typechain/factories/MACI__factory";
 import { checkDeployment, checkEnvFile } from "../../ts/utils";
-import vote from "../../ts/vote";
 
 const pollId = 0;
 
@@ -17,23 +16,9 @@ const userKeypair = new Keypair(PrivKey.unserialize(userPrivKey));
 const votes = [
   {
     stateIndex: 1,
-    voteOptionIndex: 0,
-    newVoteWeight: 4,
+    voteOptionIndex: 5,
+    newVoteWeight: 5,
     nonce: 1,
-    pollId,
-  },
-  {
-    stateIndex: 1,
-    voteOptionIndex: 1,
-    newVoteWeight: 1,
-    nonce: 2,
-    pollId,
-  },
-  {
-    stateIndex: 1,
-    voteOptionIndex: 3,
-    newVoteWeight: 3,
-    nonce: 3,
     pollId,
   },
 ];
@@ -76,9 +61,52 @@ async function main() {
     deployer
   ).attach(pollAddress);
 
-  for (let i = votes.length - 1; i >= 0; i--) {
-    await vote(poll, votes[i], userKeypair.pubKey, userKeypair.privKey);
-  }
+  const coordinatorPubKeyResult = await poll.coordinatorPubKey();
+  const coordinatorPubKey = new PubKey([
+    BigInt(coordinatorPubKeyResult.x.toString()),
+    BigInt(coordinatorPubKeyResult.y.toString()),
+  ]);
+
+  const encKeypair = new Keypair();
+  const sharedKey = Keypair.genEcdhSharedKey(
+    encKeypair.privKey,
+    coordinatorPubKey
+  );
+
+  const _stateIndex = BigInt(votes[0].stateIndex);
+  const _voteOptionIndex = BigInt(votes[0].voteOptionIndex);
+  const _newVoteWeight = BigInt(votes[0].newVoteWeight);
+  const _nonce = BigInt(votes[0].nonce);
+  const _pollId = BigInt(votes[0].pollId);
+
+  const command = new Command(
+    _stateIndex,
+    userKeypair.pubKey,
+    _voteOptionIndex,
+    _newVoteWeight,
+    _nonce,
+    _pollId
+  );
+
+  const signature = command.sign(userKeypair.privKey);
+  const message = command.encrypt(signature, sharedKey);
+  const encPubKey = encKeypair.pubKey;
+
+  console.log("Publishing message...");
+  const tx = await poll.publishMessage(
+    // @ts-ignore
+    message.asContractParam(),
+    encPubKey.asContractParam()
+  );
+  const { logs } = await tx.wait();
+  console.log("Transaction hash:", tx.hash);
+
+  const iface = poll.interface;
+  const PublishMessageEvent = iface.parseLog(logs[logs.length - 1]);
+  const messageEventArg = PublishMessageEvent.args._message.toString();
+  console.log("Message:", messageEventArg);
+
+  console.log("Message Proof", message.data);
 }
 
 main().catch((error) => {
