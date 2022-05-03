@@ -17,23 +17,16 @@ const userKeypair = new Keypair(PrivKey.unserialize(userPrivKey));
 const votes = [
   {
     stateIndex: 1,
-    voteOptionIndex: 0,
-    newVoteWeight: 4,
+    voteOptionIndex: 2,
+    newVoteWeight: 2,
     nonce: 1,
     pollId,
   },
   {
     stateIndex: 1,
     voteOptionIndex: 1,
-    newVoteWeight: 1,
-    nonce: 2,
-    pollId,
-  },
-  {
-    stateIndex: 1,
-    voteOptionIndex: 3,
     newVoteWeight: 3,
-    nonce: 3,
+    nonce: 2,
     pollId,
   },
 ];

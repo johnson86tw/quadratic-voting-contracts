@@ -39,8 +39,8 @@ const votes = [
   },
   {
     stateIndex,
-    voteOptionIndex: 4,
-    newVoteWeight: 4,
+    voteOptionIndex: 3,
+    newVoteWeight: 3,
     nonce: 3,
     pollId,
   },

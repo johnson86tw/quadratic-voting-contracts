@@ -14,8 +14,8 @@ const pollId = 0;
 const votes = [
   {
     stateIndex,
-    voteOptionIndex: 1,
-    newVoteWeight: 3,
+    voteOptionIndex: 4,
+    newVoteWeight: 5,
     nonce: 1,
     pollId,
   },
