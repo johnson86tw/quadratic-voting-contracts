@@ -6,7 +6,7 @@ import { Addresses } from "../../ts/interfaces";
 import { MACI__factory } from "../../build/typechain/factories/MACI__factory";
 import { checkDeployment, checkEnvFile } from "../../ts/utils";
 
-const duration = 18000;
+const duration = 300;
 
 // .env
 const coordinatorPubKey = process.env.COORDINATOR_PUB_KEY as string;
@@ -68,14 +68,18 @@ async function main() {
   const deployPollEvent = iface.parseLog(logs[logs.length - 1]);
   const pollId = deployPollEvent.args._pollId.toString();
   const pollAddr = deployPollEvent.args._pollAddr.toString();
-  const coordinatorPubKeyEventArg = deployPollEvent.args._pubKey.toString();
+  const coordinatorPubKeyOnChain = deployPollEvent.args._pubKey
+    .toString()
+    .split(",");
+  const coorPubKey = new PubKey([
+    BigInt(coordinatorPubKeyOnChain[0]),
+    BigInt(coordinatorPubKeyOnChain[1]),
+  ]);
 
   console.log(`Successfully deployed poll contract with poll_id: ${pollId}`);
   console.log("Poll ID:", pollId.toString());
   console.log("Poll contract:", pollAddr);
-  console.log(
-    `coordinator public key: ${coordinatorPubKeyEventArg}` // TODO: how to serialize this?
-  );
+  console.log(`Coordinator's public key: ${coorPubKey.serialize()}`);
 }
 
 main().catch((error) => {

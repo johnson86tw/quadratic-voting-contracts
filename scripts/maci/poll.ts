@@ -60,6 +60,8 @@ async function main() {
     deployer
   ).attach(messageAqAddress);
 
+  console.log("Poll", poll.address);
+  console.log("MACI", maci.address);
   console.log("Poll ID:", pollId);
   console.log("isAfterDeadline:", await poll.isAfterDeadline());
   console.log("messageAq.subTreesMerged:", await messageAq.subTreesMerged());

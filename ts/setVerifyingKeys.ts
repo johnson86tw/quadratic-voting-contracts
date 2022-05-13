@@ -138,6 +138,7 @@ const setVerifyingKeys = async (
 
     console.log("Transaction hash:", tx.hash);
 
+    // Note: May fail on Goerli below
     const processVkOnChain = await vkRegistry.getProcessVk(
       treeDepths.stateTreeDepth,
       treeDepths.msgTreeDepth,

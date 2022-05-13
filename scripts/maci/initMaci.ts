@@ -57,11 +57,15 @@ async function main() {
   if (pollFactoryOwner !== maci.address) {
     const tx = await pollFactory.transferOwnership(maci.address);
     await tx.wait();
-  } else if (messageAqFactoryOwner !== pollFactory.address) {
+  } else {
+    console.log("Skip pollFactory ownership transferring");
+  }
+
+  if (messageAqFactoryOwner !== pollFactory.address) {
     const tx = await messageAqFactory.transferOwnership(pollFactory.address);
     await tx.wait();
   } else {
-    console.log("Skip ownership transferring");
+    console.log("Skip messageAqFactory ownership transferring");
   }
 
   // init maci

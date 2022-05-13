@@ -104,11 +104,29 @@ async function main() {
   console.log(`Successfully deployed MACI at ${maci.address}`);
 
   // transfer ownership
-  await pollFactory.transferOwnership(maci.address);
-  await messageAqFactory.transferOwnership(pollFactory.address);
+  console.log("Transferring ownership...");
+
+  const pollFactoryOwner = await pollFactory.owner();
+  const messageAqFactoryOwner = await messageAqFactory.owner();
+
+  if (pollFactoryOwner !== maci.address) {
+    const tx = await pollFactory.transferOwnership(maci.address);
+    await tx.wait();
+  } else {
+    console.log("Skip pollFactory ownership transferring");
+  }
+
+  if (messageAqFactoryOwner !== pollFactory.address) {
+    const tx = await messageAqFactory.transferOwnership(pollFactory.address);
+    await tx.wait();
+  } else {
+    console.log("Skip messageAqFactory ownership transferring");
+  }
 
   // init maci
-  await maci.init(vkRegistry.address, messageAqFactory.address);
+  console.log("Initializing MACI...");
+  const tx = await maci.init(vkRegistry.address, messageAqFactory.address);
+  await tx.wait();
 
   if (await maci.isInitialised()) {
     console.log("Successfully deployed contracts and initialized maci");

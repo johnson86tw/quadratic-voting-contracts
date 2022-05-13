@@ -2,7 +2,7 @@ import hre, { ethers } from "hardhat";
 import path from "path";
 import fs from "fs";
 import { Addresses } from "../../ts/interfaces";
-import { Keypair, PrivKey } from "maci-domainobjs";
+import { Keypair, PrivKey, PubKey } from "maci-domainobjs";
 import { MACI__factory } from "../../build/typechain/factories/MACI__factory";
 import { checkDeployment, checkEnvFile } from "../../ts/utils";
 
@@ -60,12 +60,16 @@ async function main() {
   const iface = maci.interface;
   const signUpEvent = iface.parseLog(logs[logs.length - 1]);
   const stateIndex = signUpEvent.args._stateIndex.toString();
-  const userPubKey = signUpEvent.args._userPubKey.toString();
+  const userPubKeyOnChain = signUpEvent.args._userPubKey.toString().split(",");
+  const userPubKey = new PubKey([
+    BigInt(userPubKeyOnChain[0]),
+    BigInt(userPubKeyOnChain[1]),
+  ]);
   const voiceCreditBalance = signUpEvent.args._voiceCreditBalance.toString();
   const timestamp = signUpEvent.args._timestamp.toString();
 
   console.log(`Successfully sign up at state index: ${stateIndex}`);
-  console.log(`userPubKey: ${userPubKey}`); // TODO: how to serialize this?
+  console.log(`userPubKey: ${userPubKey.serialize()}`);
   console.log(`voiceCreditBalance: ${voiceCreditBalance}`);
   console.log(`timestamp: ${timestamp}`);
 }

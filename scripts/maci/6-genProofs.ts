@@ -25,12 +25,15 @@ async function main() {
     fs.readFileSync(deploymentPath).toString()
   ) as Addresses;
   checkDeployment(addresses);
+  console.log("MACI", addresses.maci);
 
   let volume = `${defaultsPath}/localhost/defaults.js:/root/maci/cli/build/defaults.js`;
   if (hre.network.name !== "localhost") {
     // TODO: should check if the file exists
     volume = `${defaultsPath}/defaults.js:/root/maci/cli/build/defaults.js`;
   }
+
+  // TODO: add prompt - whether to remove existing tally.json
 
   const cmd = `docker-compose run --volume=${volume} maci node build/index.js genProofs \
     --contract ${addresses.maci} \
