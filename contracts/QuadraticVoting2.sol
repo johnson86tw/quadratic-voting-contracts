@@ -3,12 +3,11 @@ pragma solidity ^0.7.2;
 
 import {InitialVoiceCreditProxy} from "maci-contracts/contracts/initialVoiceCreditProxy/InitialVoiceCreditProxy.sol";
 import {SignUpGatekeeper} from "maci-contracts/contracts/gatekeepers/SignUpGatekeeper.sol";
-import {MACI} from "maci-contracts/contracts/MACI.sol";
 import {Whitelist} from "./voterRegistry/Whitelist.sol";
 import {SimpleVoteOption} from "./voteOption/SimpleVoteOption.sol";
 
-/*
- * This is the most simple contract for implementing MACI
+/**
+ * @dev This contract used Whitelist as the sign-up gatekeeper.
  */
 contract QuadraticVoting2 is
     InitialVoiceCreditProxy,

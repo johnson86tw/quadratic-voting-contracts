@@ -25,7 +25,6 @@ async function main() {
     fs.readFileSync(deploymentPath).toString()
   ) as Addresses;
   checkDeployment(addresses);
-  console.log("MACI", addresses.maci);
 
   let volume = `${defaultsPath}/localhost/defaults.js:/root/maci/cli/build/defaults.js`;
   if (hre.network.name !== "localhost") {

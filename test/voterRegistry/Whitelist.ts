@@ -30,9 +30,8 @@ describe("Whitelist", function () {
   it("should return true if the accounts is whitelised", async () => {
     for (let i = 0; i < whitelisted.length; i++) {
       const merkleProof = tree.getHexProof(keccak256(whitelisted[i].address));
-      expect(
-        await whitelist.register(whitelisted[i].address, merkleProof.toString())
-      ).to.be.true;
+      expect(await whitelist.register(whitelisted[i].address, merkleProof)).to
+        .be.true;
     }
   });
 
@@ -41,7 +40,7 @@ describe("Whitelist", function () {
       keccak256(notWhitelisted[0].address)
     );
     await expect(
-      whitelist.register(whitelisted[0].address, invalidMerkleProof.toString())
+      whitelist.register(whitelisted[0].address, invalidMerkleProof)
     ).to.be.revertedWith(
       "Whitelist: voter isn't whitelisted or incorrect proof"
     );
@@ -51,7 +50,7 @@ describe("Whitelist", function () {
     const merkleProof = tree.getHexProof(keccak256(whitelisted[0].address));
     for (let i = 0; i < whitelisted.length; i++) {
       await expect(
-        whitelist.register(notWhitelisted[i].address, merkleProof.toString())
+        whitelist.register(notWhitelisted[i].address, merkleProof)
       ).to.be.revertedWith(
         "Whitelist: voter isn't whitelisted or incorrect proof"
       );
