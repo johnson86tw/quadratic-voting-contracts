@@ -1,6 +1,6 @@
 # Quadratic Voting Contracts
 
-This project is about Ethereum smart contracts for running quadratic voting (QV). It can also be used as a starter to build more complicated QV applications on the [minimal anti-collusion infrastructure (MACI)](https://appliedzkp.github.io/maci/). 
+This project is about Ethereum smart contracts for running quadratic voting (QV). It can also be used as a starter to build more complicated QV applications on the [minimal anti-collusion infrastructure (MACI)](https://privacy-scaling-explorations.github.io/maci/). 
 
 ## Getting started
 
@@ -12,7 +12,7 @@ This project is about Ethereum smart contracts for running quadratic voting (QV)
 ### Run scripts
 - Run `yarn start` to start localhost network.
 - Run `yarn hardhat run scripts/maci/0-deploy.ts --network localhost` to deploy contracts.
-- Run `yarn hardhat run scripts/maci/6-genProofs.ts --network localhost` to generate proofs with docker-compose. (Note that you should have this [maci docker image](https://hub.docker.com/r/chnejohnson/maci-v1) and the generated zkeys and witnesses.)
+- Run `yarn hardhat run scripts/maci/6-genProofs.ts --network localhost` to generate proofs with docker-compose. (Note that you should have this [maci docker image](https://hub.docker.com/r/chnejohnson/maci-v1) and the [generated zkeys and witnesses](https://github.com/privacy-scaling-explorations/maci/wiki/Download-Precompiled-Circuit-and-Zkeys).)
 - Run `./test/runScripts0-8.sh` to run through the cycle of maci. 
 
 ## How to design a QV application?
@@ -23,7 +23,7 @@ The idea is to associate a cost with a vote. Voters buy as many votes as they wi
 
 Cost to the voter = (Number of votes)^2
 
-The cost to the voter, which is the the payment for votes, may be through either an artificial currency or real money. So our degree of freedom is the design of the voice credit and the way of applying the voting results to the app. 
+The cost to the voter, which is the payment for votes, may be through either an artificial currency or real money. So our degree of freedom is the design of the voice credit and the way of applying the voting results to the app. 
 
 There are two main considerations in designing a QV app:
 
@@ -34,3 +34,7 @@ There are two main considerations in designing a QV app:
 
 - [dHackathon](contracts/dHackathon) - The prize pool will be split among winners pro-rata to the number of votes they received.
 - [dDonation](contracts/dDonation/) - The donations will be split based on voters' preferences, and respectively flow to the predefined addresses owned by nonprofits organizations accepting ETH donations.
+
+## Credits
+
+This project is supported by the Ethereum Foundation [ESP Grants](https://esp.ethereum.foundation/applicants) and powered by the [Privacy & Scaling Explorations](https://twitter.com/PrivacyScaling) team, thanks a lot!
