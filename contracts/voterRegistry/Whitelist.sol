@@ -3,7 +3,6 @@ pragma experimental ABIEncoderV2;
 pragma solidity ^0.7.2;
 
 import "@openzeppelin/contracts/cryptography/MerkleProof.sol";
-import {MACI} from "maci-contracts/contracts/MACI.sol";
 import {SignUpGatekeeper2} from "./SignUpGatekeeper2.sol";
 
 contract Whitelist is SignUpGatekeeper2 {
