@@ -3,7 +3,7 @@ version: "3.6"
 services:
   maci:
     tty: true
-    image: maci
+    image: chnejohnson/maci-v1
     network_mode: "host"
     working_dir: /root/maci/cli
     volumes:
